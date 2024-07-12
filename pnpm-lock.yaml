@@ -31,6 +31,9 @@ importers:
       pg:
         specifier: ^8.12.0
         version: 8.12.0
+      znv:
+        specifier: ^0.4.0
+        version: 0.4.0(zod@3.23.8)
       zod:
         specifier: ^3.23.8
         version: 3.23.8

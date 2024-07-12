@@ -1,7 +1,10 @@
-import React from "react";
+"use client";
+import { GameArea } from "@/components/GameArea";
 
-const App = () => {
-  return <div>Hello World</div>;
-};
-
-export default App;
+export default function Home() {
+  return (
+    <main className="w-[100vw] h-[100vh] bg-gray-700">
+      <GameArea initialGridSize={10} initialZoomLevel={5} />
+    </main>
+  );
+}
