@@ -86,7 +86,6 @@ export const GameArea = ({
         style={{
           display: "grid",
           gridTemplateColumns: `repeat(${gridSize}, ${dynamicSize}px)`,
-          gap: "8px",
         }}
       >
         {Array.from({ length: gridSize * gridSize }).map((_, i) => (
