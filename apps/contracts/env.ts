@@ -7,5 +7,6 @@ export const ENV = parseEnv(process.env, {
   MAINET_URL: z.string(),
   DEPLOYER_MNEMONIC: z.string(),
   OPERATOR_MNEMONIC: z.string(),
+  SENDER_MNEMONIC: z.string(),
   FEE_MNEMONIC: z.string(),
 });

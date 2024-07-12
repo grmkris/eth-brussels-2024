@@ -24,7 +24,7 @@ const config: HardhatUserConfig = {
     },
   },
   ignition: {
-    requiredConfirmations: 6
+    requiredConfirmations: 6,
   },
   networks: {
     hardhat: {
@@ -41,8 +41,8 @@ const config: HardhatUserConfig = {
     },
   },
   mocha: {
-    timeout: 100000
-  }
+    timeout: 100000,
+  },
 };
 
 export default config;
