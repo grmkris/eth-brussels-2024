@@ -56,7 +56,9 @@ describe("Transfers", function () {
       const tx = await transfers.write.registerOperatorWithFeeDestination([
         owner.account.address,
       ]);
+
       console.log("registerOperatorWithFeeDestination tx", tx);
+      expect(tx).to.exist;
     });
   });
 });
