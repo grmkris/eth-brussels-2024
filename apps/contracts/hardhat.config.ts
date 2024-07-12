@@ -36,12 +36,6 @@ const config: HardhatUserConfig = {
         mnemonic: ENV.DEPLOYER_MNEMONIC,
       },
     },
-    sepolia: {
-      url: ENV.SEPOLIA_URL,
-      accounts: {
-        mnemonic: ENV.DEPLOYER_MNEMONIC,
-      },
-    },
   },
 };
 
