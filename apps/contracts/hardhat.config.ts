@@ -26,12 +26,12 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking: {
-        url: ENV.MAINET_URL,
+        url: ENV.SEPOLIA_URL,
         blockNumber: 6297895,
       },
     },
-    mumbai: {
-      url: ENV.MUMBAI_URL,
+    sepolia: {
+      url: ENV.SEPOLIA_URL,
       accounts: {
         mnemonic: ENV.DEPLOYER_MNEMONIC,
       },
