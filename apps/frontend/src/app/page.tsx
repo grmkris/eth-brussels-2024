@@ -1,10 +1,7 @@
-"use client";
-import { Grid } from "@/components/Grid";
+import React from "react";
 
-export default function Home() {
-  return (
-    <main className="w-full h-full bg-gray-700">
-      <Grid />
-    </main>
-  );
-}
+const App = () => {
+  return <div>Hello World</div>;
+};
+
+export default App;
