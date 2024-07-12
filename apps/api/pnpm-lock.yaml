@@ -29,6 +29,9 @@ importers:
       pg:
         specifier: ^8.12.0
         version: 8.12.0
+      znv:
+        specifier: ^0.4.0
+        version: 0.4.0(zod@3.23.8)
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -410,6 +413,9 @@ packages:
     os: [darwin, linux, win32]
     hasBin: true
 
+  colorette@2.0.20:
+    resolution: {integrity: sha512-IfEDxwoWIjkeXL1eXcDiow4UbKjhLdq6/EuSVR9GMN7KVH3r9gQ83e73hsz1Nd1T3ijd5xv1wcWRYO+D6kCI2w==}
+
   debug@4.3.5:
     resolution: {integrity: sha512-pt0bNEmneDIvdL1Xsd9oDQ/wrQRkXDT4AUWlNZNPKvW5x/jyO9VFXkJUP07vQ2upmw5PlaITaPKc31jK13V+jg==}
     engines: {node: '>=6.0'}
@@ -656,6 +662,11 @@ packages:
     engines: {node: '>= 14'}
     hasBin: true
 
+  znv@0.4.0:
+    resolution: {integrity: sha512-6/pGsQhBisLzKdyC90mUCRgYDtCfQ4aQ68sDybexq3GMzqqkp662GH6qIyuCHJC1i72hJPHbWAhccTJVuZUQfA==}
+    peerDependencies:
+      zod: ^3.13.2
+
   zod-validation-error@3.3.0:
     resolution: {integrity: sha512-Syib9oumw1NTqEv4LT0e6U83Td9aVRk9iTXPUQr1otyV1PuXQKOvOwhMNqZIq5hluzHP2pMgnOmHEo7kPdI2mw==}
     engines: {node: '>=18.0.0'}
@@ -889,6 +900,8 @@ snapshots:
       '@oven/bun-windows-x64': 1.1.18
       '@oven/bun-windows-x64-baseline': 1.1.18
 
+  colorette@2.0.20: {}
+
   debug@4.3.5:
     dependencies:
       ms: 2.1.2
@@ -1071,6 +1084,11 @@ snapshots:
   xtend@4.0.2: {}
 
   yaml@2.4.5: {}
+
+  znv@0.4.0(zod@3.23.8):
+    dependencies:
+      colorette: 2.0.20
+      zod: 3.23.8
 
   zod-validation-error@3.3.0(zod@3.23.8):
     dependencies:

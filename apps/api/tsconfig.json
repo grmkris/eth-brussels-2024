@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "hono/jsx"
+  },
+  "include": [
+    "./",
+    "src",
+    "test",
+    "scripts",
+    "drizzle.config.ts",
+  ],
+  "exclude": ["node_modules", "**/**/node_modules/**/**"]
+}

@@ -1,10 +1,10 @@
 "use client";
-import { Grid } from "@/components/Grid";
+import { GameArea } from "@/components/GameArea";
 
 export default function Home() {
   return (
-    <main className="w-full h-full bg-gray-700">
-      <Grid />
+    <main className="w-[100vw] h-[100vh] bg-gray-800">
+      <GameArea initialGridSize={22} initialZoomLevel={5} />
     </main>
   );
 }
