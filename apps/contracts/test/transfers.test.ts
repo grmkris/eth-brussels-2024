@@ -52,7 +52,7 @@ describe("Transfers", function () {
 
       await transferTokenPreApproved({
         chain: a.chain,
-        token: WRAPPED_NATIVE_CURRENCY_ADDRESS, // TODO deploy test token
+        token: TEST_ERC_20, // TODO deploy test erc20 token
         transferContract: transfers.address,
       });
     });
