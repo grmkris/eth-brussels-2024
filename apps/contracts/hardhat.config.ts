@@ -2,10 +2,10 @@ import { HardhatUserConfig, task } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox-viem";
 import "@nomicfoundation/hardhat-ignition-viem";
 import "@nomicfoundation/hardhat-viem";
-import {createWalletClient, formatEther, http} from "viem";
+import { createWalletClient, formatEther, http } from "viem";
 import { ENV } from "./env";
-import {deriveKeyFromMnemonicAndPath} from "hardhat/internal/util/keys-derivation";
-import {mnemonicToAccount} from "viem/accounts";
+import { deriveKeyFromMnemonicAndPath } from "hardhat/internal/util/keys-derivation";
+import { mnemonicToAccount } from "viem/accounts";
 import env from "hardhat";
 
 const config: HardhatUserConfig = {
@@ -61,20 +61,38 @@ task(
       console.log(`${account.account.address}: ${formatEther(balance)} ETH`);
     }
 
-    const operator = mnemonicToAccount(ENV.OPERATOR_MNEMONIC)
+    const operator = mnemonicToAccount(ENV.OPERATOR_MNEMONIC);
 
     const operatorClient = createWalletClient({
       account: operator,
-      transport: http(deployerClient.chain.rpcUrls.default.http as unknown as string)
-    })
+      transport: http(
+        deployerClient.chain.rpcUrls.default.http as unknown as string,
+      ),
+    });
 
-    const feeRecipient = mnemonicToAccount(ENV.FEE_MNEMONIC)
+    const feeRecipient = mnemonicToAccount(ENV.FEE_MNEMONIC);
     const feeOperator = createWalletClient({
-        account: feeRecipient,
-        transport: http(deployerClient.chain.rpcUrls.default.http as unknown as string)
-    })
+      account: feeRecipient,
+      transport: http(
+        deployerClient.chain.rpcUrls.default.http as unknown as string,
+      ),
+    });
 
-    console.log("Operator", operatorClient.account.address)
-    console.log("Fee Recipient", feeOperator.account.address)
+    const operatorBalance = await deployerClient.getBalance({
+      address: operator.address,
+    });
+
+    console.log(
+      `Operator ${operator.address}: ${formatEther(operatorBalance)} ETH`,
+    );
+    const feeRecipientBalance = await deployerClient.getBalance({
+      address: feeRecipient.address,
+    });
+
+    console.log(
+      `Fee recipient ${feeRecipient.address}: ${formatEther(
+        feeRecipientBalance,
+      )} ETH`,
+    );
   },
 );
