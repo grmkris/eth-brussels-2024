@@ -1,0 +1,32 @@
+{
+  "name": "hardhat-project",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "clients": "npx hardhat run scripts/clients.ts",
+    "accounts": "hardhat accounts",
+    "accounts:mumbai": "hardhat accounts --network mumbai",
+    "test:mumbai": "hardhat test --network mumbai"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ignition": "^0.14.0",
+    "@nomicfoundation/hardhat-ignition-viem": "^0.14.0",
+    "@nomicfoundation/hardhat-toolbox-viem": "^2.0.0",
+    "@nomicfoundation/hardhat-viem": "^2.0.0",
+    "@types/chai": "^4.3.12",
+    "@types/chai-as-promised": "^7.1.8",
+    "chai": "^4.4.1",
+    "chai-as-promised": "^7.1.1",
+    "dotenv": "^16.4.5",
+    "hardhat": "^2.20.1",
+    "viem": "^2.7.18",
+    "znv": "^0.4.0",
+    "zod": "^3.22.4"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "4.9.6",
+    "@uniswap/universal-router": "^1.6.0",
+    "abitype": "^1.0.1",
+    "solmate": "^6.2.0"
+  }
+}
