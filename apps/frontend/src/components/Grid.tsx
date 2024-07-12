@@ -5,6 +5,7 @@ export const Grid = () => {
   const canvasRef = useRef(null);
   const zoomRef = useRef(1);
   const startDrag = useRef(null);
+  const iconsRef = useRef({}); // To store icons by their grid positions
 
   useEffect(() => {
     paper.setup(canvasRef.current);
@@ -71,6 +72,23 @@ export const Grid = () => {
       const column = Math.floor(projectPosition.x / gridSize);
 
       console.log(`Row: ${row}, Column: ${column}`);
+      const key = `${row},${column}`;
+      if (iconsRef.current[key]) {
+        // Remove icon
+        iconsRef.current[key].remove();
+        delete iconsRef.current[key];
+      } else {
+        // Add icon
+        const icon = new paper.Path.Circle({
+          center: new paper.Point(
+            column * gridSize + gridSize / 2,
+            row * gridSize + gridSize / 2,
+          ),
+          radius: gridSize / 4,
+          fillColor: "red",
+        });
+        iconsRef.current[key] = icon;
+      }
     };
 
     canvasRef.current.addEventListener("wheel", handleWheel);
