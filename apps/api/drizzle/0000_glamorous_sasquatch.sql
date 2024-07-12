@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS "players" (
 CREATE TABLE IF NOT EXISTS "games" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"status" text NOT NULL,
-	"winner_id" uuid NOT NULL,
+	"winner_id" uuid,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
