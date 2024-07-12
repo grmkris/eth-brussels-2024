@@ -15,7 +15,7 @@ import {Constants as UniswapConstants} from "@uniswap/universal-router/contracts
 import "../interfaces/IWrappedNativeCurrency.sol";
 import "../interfaces/ITransfers.sol";
 import "../utils/Sweepable.sol";
-import "../permit2/src/Permit2.sol";
+import "../interfaces/permit2/IPermit2.sol";
 
 // Uniswap error selectors, used to surface information when swaps fail
 // Pulled from @uniswap/universal-router/out/V3SwapRouter.sol/V3SwapRouter.json after compiling with forge
@@ -44,7 +44,7 @@ contract Transfers is Context, Ownable, Pausable, ReentrancyGuard, Sweepable, IT
 
     // @dev permit2 SignatureTransfer contract address. Used for tranferring tokens with a signature instead of a full transaction.
     // See: https://github.com/Uniswap/permit2
-    Permit2 public immutable permit2;
+    IPermit2 public immutable permit2;
 
     // @dev Canonical wrapped token for this chain. e.g. (wETH or wMATIC).
     IWrappedNativeCurrency private immutable wrappedNativeCurrency;
@@ -53,7 +53,7 @@ contract Transfers is Context, Ownable, Pausable, ReentrancyGuard, Sweepable, IT
     // @param _wrappedNativeCurrency The address of the wrapped token for this chain
     constructor(
         IUniversalRouter _uniswap,
-        Permit2 _permit2,
+        IPermit2 _permit2,
         address _initialOperator,
         address _initialFeeDestination,
         IWrappedNativeCurrency _wrappedNativeCurrency
