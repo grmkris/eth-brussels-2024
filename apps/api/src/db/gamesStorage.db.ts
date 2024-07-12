@@ -1,6 +1,6 @@
 import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { z } from "zod";
+import { z } from "@hono/zod-openapi";
 import { Players } from "./playersStorage.db";
 
 export const GameStatuses = [
@@ -13,14 +13,14 @@ export const GameStatuses = [
 export const Games = pgTable("games", {
     id: uuid("id").primaryKey().defaultRandom(),
     status: text("status", { enum: GameStatuses }).notNull(),
-    winnerId: uuid("winner_id").notNull().references(() => Players.id),
+    winnerId: uuid("winner_id").references(() => Players.id),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
-export const SelectGame = createSelectSchema(Games);
+export const SelectGame = createSelectSchema(Games, {});
 
-export const CreateGame = createInsertSchema(Games).omit({id: true, createdAt: true, updatedAt: true});
+export const CreateGame = createInsertSchema(Games, {}).omit({id: true, createdAt: true, updatedAt: true});
 
 export type SelectGame = z.infer<typeof SelectGame>;
 export type CreateGame = z.infer<typeof CreateGame>;
