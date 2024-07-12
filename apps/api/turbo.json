@@ -1,0 +1,42 @@
+{
+    "$schema": "https://turbo.build/schema.json",
+    "extends": ["//"],
+    "pipeline": {
+      "dev": {
+        "cache": false
+      },
+      "start": {
+        "cache": false
+      },
+      "lint": {
+        "outputs": []
+      },
+      "test": {
+        "outputs": [],
+        "env": [
+          "DB_MIGRATION_DIR",
+          "DB_LOGGING_ENABLED",
+          "DB_DATABASE",
+          "DB_PASSWORD",
+          "DB_USER",
+          "DB_PORT",
+          "DB_HOST"
+        ]
+      },
+      "test:unit": {
+        "outputs": [],
+        "env": [
+          "DB_MIGRATION_DIR",
+          "DB_LOGGING_ENABLED",
+          "DB_DATABASE",
+          "DB_PASSWORD",
+          "DB_USER",
+          "DB_PORT",
+          "DB_HOST"
+        ]
+      },
+      "prettier": {
+        "outputs": []
+      }
+    }
+  }
