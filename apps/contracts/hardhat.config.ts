@@ -2,8 +2,11 @@ import { HardhatUserConfig, task } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox-viem";
 import "@nomicfoundation/hardhat-ignition-viem";
 import "@nomicfoundation/hardhat-viem";
-import { formatEther } from "viem";
+import { createWalletClient, formatEther, http } from "viem";
 import { ENV } from "./env";
+import { deriveKeyFromMnemonicAndPath } from "hardhat/internal/util/keys-derivation";
+import { mnemonicToAccount } from "viem/accounts";
+import env from "hardhat";
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -23,12 +26,12 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking: {
-        url: ENV.MAINET_URL,
-        blockNumber: 13000000,
+        url: ENV.SEPOLIA_URL,
+        blockNumber: 6297895,
       },
     },
-    mumbai: {
-      url: ENV.MUMBAI_URL,
+    sepolia: {
+      url: ENV.SEPOLIA_URL,
       accounts: {
         mnemonic: ENV.DEPLOYER_MNEMONIC,
       },
@@ -43,12 +46,47 @@ task(
   "Prints the list of accounts and their balances",
   async (_, hre) => {
     const accounts = await hre.viem.getWalletClients();
-    const publicClient = await hre.viem.getPublicClient();
+    const deployerClient = await hre.viem.getPublicClient();
+
     for (const account of accounts) {
-      const balance = await publicClient.getBalance({
+      const balance = await deployerClient.getBalance({
         address: account.account.address,
       });
       console.log(`${account.account.address}: ${formatEther(balance)} ETH`);
     }
+
+    const operator = mnemonicToAccount(ENV.OPERATOR_MNEMONIC);
+
+    const operatorClient = createWalletClient({
+      account: operator,
+      transport: http(
+        deployerClient.chain.rpcUrls.default.http as unknown as string,
+      ),
+    });
+
+    const feeRecipient = mnemonicToAccount(ENV.FEE_MNEMONIC);
+    const feeOperator = createWalletClient({
+      account: feeRecipient,
+      transport: http(
+        deployerClient.chain.rpcUrls.default.http as unknown as string,
+      ),
+    });
+
+    const operatorBalance = await deployerClient.getBalance({
+      address: operator.address,
+    });
+
+    console.log(
+      `Operator ${operator.address}: ${formatEther(operatorBalance)} ETH`,
+    );
+    const feeRecipientBalance = await deployerClient.getBalance({
+      address: feeRecipient.address,
+    });
+
+    console.log(
+      `Fee recipient ${feeRecipient.address}: ${formatEther(
+        feeRecipientBalance,
+      )} ETH`,
+    );
   },
 );
