@@ -1,5 +1,5 @@
 {
-  "id": "60572ed7-523a-4692-b4a4-37f7c8bb26e6",
+  "id": "28bbaf36-7859-4cc7-8a6b-0bf6fd0204fa",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -62,7 +62,7 @@
           "name": "winner_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
