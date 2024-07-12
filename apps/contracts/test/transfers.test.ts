@@ -37,6 +37,13 @@ describe("Transfers", function () {
     return { owner, otherAccount, transfers };
   }
 
+  async function deployToken() {
+    console.log("Deploying Token");
+    const { erc20 } = await hre.ignition.deploy(ERC20Module);
+
+    return erc20.address;
+  }
+
   describe("Deployment", function () {
     it("Correctly deploy", async function () {
       const { transfers, owner, otherAccount } = await deployTransfersFixture();
@@ -49,10 +56,12 @@ describe("Transfers", function () {
       console.log("transfers", transfers.address);
 
       const a = await hre.viem.getPublicClient();
-
+      const erc20 = await deployToken();
+        
+      console.log("Deployed ERC20", erc20);
       await transferTokenPreApproved({
         chain: a.chain,
-        token: TEST_ERC_20, // TODO deploy test erc20 token
+        token: erc20,
         transferContract: transfers.address,
       });
     });
@@ -80,6 +89,7 @@ import {
   keccak256,
 } from "viem";
 import { Erc20Abi, TransferAbi } from "../sdk/transfer.abi";
+import ERC20Module from "../ignition/modules/ERC20Module";
 
 export const transferTokenPreApproved = async (props: {
   chain: Chain;
