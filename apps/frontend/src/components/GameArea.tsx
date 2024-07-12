@@ -13,10 +13,10 @@ export const GameArea = ({
   const [panning, setPanning] = useState(false); // State to track panning mode
   const [panStart, setPanStart] = useState<{ x: number; y: number } | null>(
     null,
-  ); // State to store pan start position
-  const gameAreaRef = useRef<HTMLDivElement>(null); // Reference to the game area div
-  const initialSize = 400; // Adjust this based on your preference
-  const minSquareSize = 50; // Minimum size for each square
+  );
+  const gameAreaRef = useRef<HTMLDivElement>(null);
+  const initialSize = 400;
+  const minSquareSize = 50;
 
   useEffect(() => {
     const handleMouseDown = (event: MouseEvent) => {
@@ -66,17 +66,10 @@ export const GameArea = ({
 
   const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
     if (event.metaKey || event.ctrlKey) {
-      event.preventDefault(); // Prevent default scrolling behavior when Command/Ctrl key is pressed
       handleZoomChange(event.deltaY);
     }
   };
-
-  // Calculate dynamic size based on zoom level with minimum size constraint
   const dynamicSize = Math.max(minSquareSize, initialSize / zoomLevel);
-
-  const loadSquare = (id: number) => {
-    // Logic to load a square
-  };
 
   return (
     <div
@@ -97,12 +90,7 @@ export const GameArea = ({
         }}
       >
         {Array.from({ length: gridSize * gridSize }).map((_, i) => (
-          <Square
-            key={i}
-            id={i}
-            size={dynamicSize}
-            onLoad={() => loadSquare(i)}
-          />
+          <Square key={i} id={i} size={dynamicSize} />
         ))}
       </div>
     </div>

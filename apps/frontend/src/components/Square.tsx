@@ -1,14 +1,7 @@
-import React from "react";
-
-export const Square = ({
-  id,
-  size,
-  onLoad,
-}: {
-  id: number;
-  size: number;
-  onLoad: (id: number) => void;
-}) => {
+import React, { useState } from "react";
+import { Hashicon } from "@emeraldpay/hashicon-react";
+export const Square = ({ id, size }: { id: number; size: number }) => {
+  const [hasIcon, setHasIcon] = useState(false);
   return (
     <div
       style={{
@@ -16,8 +9,12 @@ export const Square = ({
         height: `${size}px`,
         backgroundColor: "blue",
       }}
+      className="cursor-pointer"
+      onClick={() => {
+        setHasIcon(!hasIcon);
+      }}
     >
-      {id}
+      {hasIcon ? <Hashicon value={`${id}`} size={size} /> : id}
     </div>
   );
 };
