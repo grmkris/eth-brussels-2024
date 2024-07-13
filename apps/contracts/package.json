@@ -7,7 +7,8 @@
     "accounts": "hardhat accounts",
     "accounts:sepolia": "hardhat accounts --network sepolia",
     "test:sepolia": "hardhat test --network sepolia",
-    "test:sepolia:lock": "hardhat test --network sepolia test/lock.test.ts"
+    "test:sepolia:lock": "hardhat test --network sepolia test/lock.test.ts",
+    "test:local": "hardhat test --network localhost"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-ignition": "^0.14.0",

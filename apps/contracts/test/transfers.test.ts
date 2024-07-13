@@ -14,7 +14,7 @@ import {
   keccak256,
 } from "viem";
 import { Erc20Abi, TransferAbi } from "../sdk/transfer.abi";
-import ERC20Module from "../ignition/modules/ERC20Module";
+import ERC20Module from "../ignition/modules/MyTokenModule";
 
 const PERMIT2_ADDRESS = "0x000000000022D473030F116dDEE9F6B43aC78BA3";
 const UNISWAP_ROUTER_ADDRESS = "0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD";
@@ -52,7 +52,20 @@ describe("Transfers", function () {
     console.log("Deploying Token");
     const { erc20 } = await hre.ignition.deploy(ERC20Module);
 
-    return erc20.address;
+    const [first] = await hre.viem.getWalletClients();
+
+    const tx = await first.writeContract({
+      address: erc20.address,
+      abi: Erc20Abi,
+      functionName: "transfer",
+      args: [mnemonicToAccount(ENV.SENDER_MNEMONIC).address, 10000000n],
+    })
+
+    const publicClient = await hre.viem.getPublicClient();
+
+    await publicClient.waitForTransactionReceipt({ hash: tx });
+
+    return erc20;
   }
 
   describe("Deployment", function () {
@@ -69,15 +82,15 @@ describe("Transfers", function () {
       const a = await hre.viem.getPublicClient();
       const erc20 = await deployToken();
         
-      console.log("Deployed ERC20", erc20);
+      console.log("Deployed ERC20", erc20.address);
       await transferTokenPreApproved({
         chain: a.chain,
-        token: erc20,
+        token: erc20.address,
         transferContract: transfers.address,
       });
     });
 
-    it.skip("Should register operator", async function () {
+    it("Should register operator", async function () {
       const { transfers, owner, otherAccount } = await deployTransfersFixture();
 
       const tx = await transfers.write.registerOperatorWithFeeDestination([
@@ -122,27 +135,8 @@ export const transferTokenPreApproved = async (props: {
   const prefix = "0x";
   const totalAmount = recipientAmount + feeAmount;
 
-  console.log(
-    `Approving transfer contract to spend ${totalAmount} USDC tokens`,
-  );
-  // sender approve the transfer contract to spend their USDC tokens
-  const { request: approveRequest } = await publicClient.simulateContract({
-    // useContractWrite
-    chain: props.chain,
-    account: mnemonicToAccount(ENV.SENDER_MNEMONIC),
-    address: props.token,
-    abi: Erc20Abi,
-    functionName: "approve",
-    args: [props.transferContract, recipientAmount + feeAmount],
-  });
-  const approveResult = await senderWallet.writeContract({
-    ...approveRequest,
-    account: senderWallet.account,
-    chain: props.chain,
-  });
+  console.log("Allowing token")
 
-  await publicClient.waitForTransactionReceipt({ hash: approveResult });
-  console.log(`approve result, ${approveResult}`);
   // check allowance and approve if necessary
   const allowance = await publicClient.readContract({
     // useContractRead
