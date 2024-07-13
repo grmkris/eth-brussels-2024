@@ -28,6 +28,7 @@ export const usePlayPosition = (props?: {
     abi: Erc20Abi,
     functionName: "allowance",
     address: NOUNS_ERC20_TOKEN,
+    args: [account.address as Address, TRANSFER_CONTRACT_ADDRESS as Address],
   });
 
   const increaseAllowance = useWriteContract();
@@ -38,8 +39,14 @@ export const usePlayPosition = (props?: {
       if (!variables.position) throw new Error("No position description");
       if (!walletClient) throw new Error("No wallet client");
       if (!publicClient) throw new Error("No public client");
-
-      if (allowance.data && allowance.data < parseEther("2.2")) {
+      console.log("Allowance", allowance.data);
+      console.log({
+        msg: "Allowance",
+        allowance: allowance.data,
+        required: parseEther("3"),
+        compared: BigInt(allowance.data) < parseEther("3"),
+      });
+      if (BigInt(allowance.data) < parseEther("3")) {
         const txHash0 = await increaseAllowance.writeContractAsync({
           account: account.address,
           abi: Erc20Abi,
