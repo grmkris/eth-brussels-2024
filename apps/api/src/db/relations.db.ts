@@ -19,6 +19,10 @@ export const MoveRelations = relations(Moves, ({ one }) => ({
     fields: [Moves.playerId],
     references: [Players.id],
   }),
+  games: one(Games, {
+    fields: [Moves.gameId],
+    references: [Games.id],
+  }),
 }));
 
 export const GamePlayerRelations = relations(GamePlayers, ({ one }) => ({

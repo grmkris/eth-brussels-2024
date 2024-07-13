@@ -15,6 +15,13 @@
       "when": 1720877867075,
       "tag": "0001_minor_sentinel",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1720904590418,
+      "tag": "0002_perfect_ikaris",
+      "breakpoints": true
     }
   ]
 }

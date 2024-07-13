@@ -26,6 +26,7 @@ export const movesService = (deps: {
 
         // Create the move
         const createdMove = await deps.moveRepository.create({
+            gameId: props.gameId,
             playerId: props.playerId,
             xCoordinate: props.xCoordinate,
             yCoordinate: props.yCoordinate,

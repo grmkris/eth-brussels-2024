@@ -16,23 +16,16 @@ export const moveRepository = (config: {
         const moves = await db
             .select({
                 id: Moves.id,
+                gameId: Moves.gameId,
                 playerId: Moves.playerId,
                 xCoordinate: Moves.xCoordinate,
                 yCoordinate: Moves.yCoordinate,
                 createdAt: Moves.createdAt,
             })
             .from(Moves)
-            .innerJoin(
-                Players,
-                eq(Players.id, Moves.playerId),
-            )
-            .innerJoin(
-                GamePlayers,
-                eq(GamePlayers.playerId, Players.id),
-            )
             .where(and(
                 eq(Moves.playerId, props.playerId),
-                eq(GamePlayers.gameId, props.gameId),
+                eq(Moves.gameId, props.gameId),
             ))
             .execute();
 
@@ -45,6 +38,7 @@ export const moveRepository = (config: {
         const moves = await db
             .select({
                 id: Moves.id,
+                gameId: Moves.gameId,
                 playerId: Moves.playerId,
                 xCoordinate: Moves.xCoordinate,
                 yCoordinate: Moves.yCoordinate,
@@ -52,15 +46,7 @@ export const moveRepository = (config: {
                 playerAddress: Players.address,
             })
             .from(Moves)
-            .innerJoin(
-                Players,
-                eq(Players.id, Moves.playerId),
-            )
-            .innerJoin(
-                GamePlayers,
-                eq(GamePlayers.playerId, Players.id),
-            )
-            .where(eq(GamePlayers.gameId, props.gameId))
+            .where(eq(Moves.gameId, props.gameId))
             .execute();
 
         return moves;

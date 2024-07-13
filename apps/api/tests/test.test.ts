@@ -1,5 +1,5 @@
 import type { OpenAPIHono } from "@hono/zod-openapi";
-import { afterAll, beforeEach, describe, expect, it } from "bun:test";
+import { beforeEach, describe, expect, it } from "bun:test";
 
 import application from "../src/index";
 import { GameResponse, GamesResponse } from "../src/features/games/gamesSchemas";
@@ -33,8 +33,8 @@ describe("listGamesRoute", () => {
 
   it.only("should create a move", async () => {
     const path = createPath(createMoveRoute.path, {
-        gameId: "b23c2b7f-73a3-41d6-824d-f6e5a917990d",
-        playerId: "8c7fe8ee-1e03-4614-98e3-c4f6c7ee7efd",
+        gameId: "5de28b95-5b82-4605-b71e-ac39d69944b6",
+        playerId: "cdb2c9ab-7bbe-478c-9575-92d55f2ee604",
     });
 
     const res = await app.request(path, {
@@ -53,7 +53,7 @@ describe("listGamesRoute", () => {
   it("should retrieve a game", async () => {
     const path = createPath(retrieveGameRoute.path, {
         id: "ec9b4731-47a5-4dbf-9a44-5ed45a43063a",
-    }) + "?xCoordinate=0&yCoordinate=0&size=100";
+    });
 
     const res = await app.request(path, {
         method: "GET",
