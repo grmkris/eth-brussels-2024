@@ -23,6 +23,9 @@ const config: HardhatUserConfig = {
       },
     },
   },
+  ignition: {
+    requiredConfirmations: 6,
+  },
   networks: {
     hardhat: {
       forking: {
@@ -36,6 +39,9 @@ const config: HardhatUserConfig = {
         mnemonic: ENV.DEPLOYER_MNEMONIC,
       },
     },
+  },
+  mocha: {
+    timeout: 100000,
   },
 };
 

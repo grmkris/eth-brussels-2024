@@ -6,7 +6,8 @@
     "clients": "npx hardhat run scripts/clients.ts",
     "accounts": "hardhat accounts",
     "accounts:sepolia": "hardhat accounts --network sepolia",
-    "test:sepolia": "hardhat test --network sepolia"
+    "test:sepolia": "hardhat test --network sepolia",
+    "test:sepolia:lock": "hardhat test --network sepolia test/lock.test.ts"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-ignition": "^0.14.0",
