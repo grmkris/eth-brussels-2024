@@ -1,36 +1,39 @@
 import React, { useEffect, useState } from "react";
-import { Hashicon } from "@emeraldpay/hashicon-react";
 import Image from "next/image";
-import {useGetGames} from "@/hooks/games/useGetGames";
-import {useGetPlayer} from "@/hooks/player/useGetPlayer";
-import {useCreateMove} from "@/hooks/moves/useCreateMove";
+import { useGetGames } from "@/hooks/games/useGetGames";
+import { useCreateMove } from "@/hooks/moves/useCreateMove";
 import { CalculateUuidToNumber } from "@/utils/CalculateUuidToNumber";
 import { PlayersOutput } from "@/schemas/playerSchemas";
+
 export const Square = ({
-  id,
   size,
   row,
   column,
   player,
+  isNewGame = false,
 }: {
-  id: number;
   size: number;
   row: number;
   column: number;
   player?: PlayersOutput;
+  isNewGame?: boolean;
 }) => {
   const [hasIcon, setHasIcon] = useState(false);
   const [animationState, setAnimationState] = useState<
     "none" | "scaling" | "pulse"
   >("none");
-  const { refetch } = useGetPlayer();
   const move = useCreateMove({
     onSuccess: () => {
-      refetch();
-      console.log("SUCCESS");
+      setHasIcon(true);
     },
   });
   const getGames = useGetGames();
+
+  useEffect(() => {
+    if (isNewGame) {
+      setHasIcon(false);
+    }
+  }, [isNewGame]);
 
   useEffect(() => {
     if (hasIcon) {
@@ -45,8 +48,6 @@ export const Square = ({
   }, [hasIcon]);
 
   const handleClick = () => {
-    setHasIcon(true);
-    console.log(player?.id, getGames.data?.[getGames.data.length - 1].id);
     if (
       player?.id &&
       getGames.data?.[getGames.data.length - 1].id &&

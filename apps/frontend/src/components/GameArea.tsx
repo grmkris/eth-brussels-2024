@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Square } from "@/components/Square";
 import { useGetPlayer } from "@/hooks/player/useGetPlayer";
+import { useGetGames } from "@/hooks/games/useGetGames";
+import { WinnerModal } from "@/components/WinnerModal";
 
 export const GameArea = ({
   initialGridSize,
@@ -12,6 +14,7 @@ export const GameArea = ({
   const [gridSize, setGridSize] = useState(initialGridSize);
   const [zoomLevel, setZoomLevel] = useState(initialZoomLevel);
   const [panning, setPanning] = useState(false);
+
   const [panStart, setPanStart] = useState<{ x: number; y: number } | null>(
     null,
   );
@@ -19,6 +22,14 @@ export const GameArea = ({
   const initialSize = 400;
   const minSquareSize = 50;
   const player = useGetPlayer();
+  const getGames = useGetGames();
+  const [isOpen, setIsOpen] = useState(
+    !!getGames.data?.[getGames.data.length - 1]?.winnerId,
+  );
+
+  useEffect(() => {
+    setIsOpen(!!getGames.data?.[getGames.data.length - 1]?.winnerId);
+  }, [getGames.data?.[getGames.data.length - 1]?.winnerId]);
 
   useEffect(() => {
     const handleMouseDown = (event: MouseEvent) => {
@@ -114,6 +125,11 @@ export const GameArea = ({
         cursor: panning ? "move" : "auto",
       }}
     >
+      <WinnerModal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        player={player.data}
+      />
       <div
         className="p-0 m-0"
         style={{
@@ -126,9 +142,9 @@ export const GameArea = ({
           const column = i % gridSize;
           return (
             <Square
+              isNewGame={!getGames.data?.[getGames.data.length - 1]?.winnerId}
               player={player.data}
               key={i}
-              id={i}
               size={dynamicSize}
               row={row}
               column={column}
