@@ -39,7 +39,7 @@ export const Square = ({ id, size }: { id: number; size: number }) => {
   }
   //
   // // Example usage:
-  const exampleUUID = "550e8400-e29b-41d4-a716-446655440000";
+  const exampleUUID = crypto.randomUUID();
   //   const numberInRange = uuidToNumberInRange(exampleUUID);
   //   console.log(`UUID '${exampleUUID}' converts to number in range 1 to 99: ${numberInRange}`);
 
