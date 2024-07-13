@@ -1,6 +1,6 @@
 import { db } from "../db/db";
 import { eq } from "drizzle-orm";
-import { CreateGame, Games, SelectGame } from "../db/gamesStorage.db";
+import { CreateGame, Games, SelectGame, UpdateGame } from "../db/gamesStorage.db";
 
 export const gameRepository = (config: {
     db: db;
@@ -42,10 +42,29 @@ export const gameRepository = (config: {
         return createdGame[0];
     };
 
+    const update = async (props: {
+        id: string;
+        updateData: UpdateGame
+    }): Promise<SelectGame> => {
+        const updatedGame = await db
+            .update(Games)
+            .set(props.updateData)
+            .where(eq(Games.id, props.id))
+            .returning()
+            .execute();
+
+        if (updatedGame.length < 1) {
+            throw new Error("Failed to update game");
+        }
+
+        return updatedGame[0];
+    };
+
     return {
         findOneById,
         findMany,
         create,
+        update,
     }
 };
 

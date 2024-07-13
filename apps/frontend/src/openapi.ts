@@ -42,6 +42,17 @@ export default {
                     "address": {
                       "type": "string"
                     },
+                    "challenge": {
+                      "type": "string"
+                    },
+                    "signatureVerified": {
+                      "type": "boolean",
+                      "nullable": true
+                    },
+                    "worldcoinVerified": {
+                      "type": "boolean",
+                      "nullable": true
+                    },
                     "lastMove": {
                       "type": "string"
                     },
@@ -52,6 +63,9 @@ export default {
                   "required": [
                     "id",
                     "address",
+                    "challenge",
+                    "signatureVerified",
+                    "worldcoinVerified",
                     "lastMove",
                     "createdAt"
                   ]
@@ -102,6 +116,17 @@ export default {
                     "address": {
                       "type": "string"
                     },
+                    "challenge": {
+                      "type": "string"
+                    },
+                    "signatureVerified": {
+                      "type": "boolean",
+                      "nullable": true
+                    },
+                    "worldcoinVerified": {
+                      "type": "boolean",
+                      "nullable": true
+                    },
                     "lastMove": {
                       "type": "string"
                     },
@@ -112,6 +137,9 @@ export default {
                   "required": [
                     "id",
                     "address",
+                    "challenge",
+                    "signatureVerified",
+                    "worldcoinVerified",
                     "lastMove",
                     "createdAt"
                   ]
@@ -407,6 +435,17 @@ export default {
                     },
                     "createdAt": {
                       "type": "string"
+                    },
+                    "winnerId": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "ongoing",
+                        "finished"
+                      ]
                     }
                   },
                   "required": [
@@ -414,7 +453,9 @@ export default {
                     "playerId",
                     "xCoordinate",
                     "yCoordinate",
-                    "createdAt"
+                    "createdAt",
+                    "winnerId",
+                    "status"
                   ]
                 }
               }
