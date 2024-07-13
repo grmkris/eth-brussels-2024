@@ -77,6 +77,15 @@ export const playersService = (deps: { playerRepository: PlayerRepository }) => 
           .then(resolve)
           .catch(reject);
       });
+
+      if (res.statusCode == 200) {
+        deps.playerRepository.update({
+          address: props.address,
+          signatureVerified: player.signatureVerified ?? false,
+          worldcoinVerified: true,
+        });
+      }
+      return res;
     }
   };
 
