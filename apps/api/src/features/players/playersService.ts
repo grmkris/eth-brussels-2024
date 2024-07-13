@@ -64,12 +64,12 @@ export const playersService = (deps: {
 
   const verifyWorldIdPlayer = async (props: {
     jwt: string;
-    worldcoinSignature: any; // TODO @dani
+    worldcoinSignature: any; // TODO @daniel
   }) => {
     const decodedPayload = await verify(props.jwt, "mySecret");
     const address = decodedPayload.address;
     console.log(decodedPayload);
-    // TODO verify worldcoin and update player by their address
+    // TODO verify worldcoin and update player by their address TODO @daniel
   };
 
   return {
