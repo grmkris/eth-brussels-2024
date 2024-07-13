@@ -13,13 +13,9 @@ export const gamePlayerRepository = (config: {
         const createdGamePlayer = await db
             .insert(GamePlayers)
             .values(props)
-            .returning()
             .onConflictDoNothing()
+            .returning()
             .execute();
-
-        if (createdGamePlayer.length < 1) {
-            throw new Error("Failed to create game player");
-        }
 
         return createdGamePlayer[0];
     };
