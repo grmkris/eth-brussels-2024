@@ -22,5 +22,11 @@ export const SelectGame = createSelectSchema(Games, {});
 
 export const CreateGame = createInsertSchema(Games, {}).omit({id: true, createdAt: true, updatedAt: true});
 
+export const UpdateGame = createSelectSchema(Games, {
+  status: GameStatus.optional(),
+  winnerId: z.string().optional(),
+}).omit({id: true, createdAt: true, updatedAt: true});
+
 export type SelectGame = z.infer<typeof SelectGame>;
 export type CreateGame = z.infer<typeof CreateGame>;
+export type UpdateGame = z.infer<typeof UpdateGame>;
