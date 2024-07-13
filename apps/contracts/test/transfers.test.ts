@@ -4,6 +4,17 @@ import { expect } from "chai";
 import TransfersModule from "../ignition/modules/TransfersModule";
 import { mnemonicToAccount } from "viem/accounts";
 import { ENV } from "../env";
+import {
+  Address,
+  Chain,
+  createPublicClient,
+  createWalletClient,
+  encodePacked,
+  http,
+  keccak256,
+} from "viem";
+import { Erc20Abi, TransferAbi } from "../sdk/transfer.abi";
+import ERC20Module from "../ignition/modules/ERC20Module";
 
 const PERMIT2_ADDRESS = "0x000000000022D473030F116dDEE9F6B43aC78BA3";
 const UNISWAP_ROUTER_ADDRESS = "0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD";
@@ -79,18 +90,6 @@ describe("Transfers", function () {
   });
 });
 
-import {
-  Address,
-  Chain,
-  createPublicClient,
-  createWalletClient,
-  encodePacked,
-  http,
-  keccak256,
-} from "viem";
-import { Erc20Abi, TransferAbi } from "../sdk/transfer.abi";
-import ERC20Module from "../ignition/modules/ERC20Module";
-
 export const transferTokenPreApproved = async (props: {
   chain: Chain;
   token: Address;
@@ -122,10 +121,32 @@ export const transferTokenPreApproved = async (props: {
   const refundDestination = mnemonicToAccount(ENV.SENDER_MNEMONIC).address; // backend
   const prefix = "0x";
   const totalAmount = recipientAmount + feeAmount;
+
+  console.log(
+    `Approving transfer contract to spend ${totalAmount} USDC tokens`,
+  );
+  // sender approve the transfer contract to spend their USDC tokens
+  const { request: approveRequest } = await publicClient.simulateContract({
+    // useContractWrite
+    chain: props.chain,
+    account: mnemonicToAccount(ENV.SENDER_MNEMONIC),
+    address: props.token,
+    abi: Erc20Abi,
+    functionName: "approve",
+    args: [props.transferContract, recipientAmount + feeAmount],
+  });
+  const approveResult = await senderWallet.writeContract({
+    ...approveRequest,
+    account: senderWallet.account,
+    chain: props.chain,
+  });
+
+  await publicClient.waitForTransactionReceipt({ hash: approveResult });
+  console.log(`approve result, ${approveResult}`);
   // check allowance and approve if necessary
   const allowance = await publicClient.readContract({
     // useContractRead
-    account: mnemonicToAccount(ENV.SENDER_MNEMONIC),
+    account: mnemonicToAccount(ENV.SENDER_MNEMONIC).address,
     address: props.token,
     abi: Erc20Abi,
     functionName: "allowance",
@@ -142,7 +163,7 @@ export const transferTokenPreApproved = async (props: {
     const { request: approveRequest } = await publicClient.simulateContract({
       // useContractWrite
       chain: props.chain,
-      account: mnemonicToAccount(ENV.SENDER_MNEMONIC),
+      account: mnemonicToAccount(ENV.SENDER_MNEMONIC).address,
       address: props.token,
       abi: Erc20Abi,
       functionName: "approve",

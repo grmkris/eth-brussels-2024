@@ -27,12 +27,7 @@ const config: HardhatUserConfig = {
     requiredConfirmations: 6,
   },
   networks: {
-    hardhat: {
-      forking: {
-        url: ENV.SEPOLIA_URL,
-        blockNumber: 6297895,
-      },
-    },
+    hardhat: {},
     sepolia: {
       url: ENV.SEPOLIA_URL,
       accounts: {

@@ -7,7 +7,7 @@ import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
  *     address _initialFeeDestination,
  *     IWrappedNativeCurrency _wrappedNativeCurrency
  */
-const ERC20Module = buildModule("ERC20Module", (m) => {
+const ERC20Module = buildModule("MyTokenModule", (m) => {
 
   const erc20 = m.contract("MyToken");
 
