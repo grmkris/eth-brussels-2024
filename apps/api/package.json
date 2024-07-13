@@ -18,6 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "schemas": "workspace:*",
     "@hono/swagger-ui": "^0.4.0",
     "@hono/zod-openapi": "^0.14.9",
     "abitype": "^1.0.1",

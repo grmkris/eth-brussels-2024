@@ -11,6 +11,7 @@
     "test:local": "hardhat test --network localhost"
   },
   "devDependencies": {
+    "schemas": "workspace:*",
     "@nomicfoundation/hardhat-ignition": "^0.14.0",
     "@nomicfoundation/hardhat-ignition-viem": "^0.14.0",
     "@nomicfoundation/hardhat-toolbox-viem": "^2.0.0",

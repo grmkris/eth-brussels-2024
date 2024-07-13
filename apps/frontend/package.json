@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "schemas": "workspace:*",
     "@dynamic-labs/ethereum": "2.3.0",
     "@dynamic-labs/sdk-react-core": "2.3.0",
     "@dynamic-labs/wagmi-connector": "2.3.0",
