@@ -64,24 +64,32 @@ export default {
     },
     "/players": {
       "post": {
-        "operationId": "createPlayer",
-        "summary": "Create player",
+        "operationId": "requestSignature",
+        "summary": "Request signature",
         "tags": [
           "Players"
         ],
-        "description": "Create a player",
+        "description": "Request a signature for a player",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "address": {
+                  "senderAddress": {
+                    "type": "string"
+                  },
+                  "transferContractAddress": {
+                    "type": "string"
+                  },
+                  "positionString": {
                     "type": "string"
                   }
                 },
                 "required": [
-                  "address"
+                  "senderAddress",
+                  "transferContractAddress",
+                  "positionString"
                 ]
               }
             }
@@ -95,25 +103,12 @@ export default {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "id": {
-                      "type": "string",
-                      "format": "uuid"
-                    },
-                    "address": {
-                      "type": "string"
-                    },
-                    "lastMove": {
-                      "type": "string"
-                    },
-                    "createdAt": {
+                    "signature": {
                       "type": "string"
                     }
                   },
                   "required": [
-                    "id",
-                    "address",
-                    "lastMove",
-                    "createdAt"
+                    "signature"
                   ]
                 }
               }
