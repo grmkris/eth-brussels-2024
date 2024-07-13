@@ -10,7 +10,8 @@ export const useCreateGame = (props?: {
     mutationFn: async () => {
       const result = await apiClient["/games"].post();
       await queryClient.invalidateQueries();
-      return result;
+      const resultParsed = await result.json();
+      return resultParsed;
     },
     onError: (error) => {
       console.error("Error creating game", error);

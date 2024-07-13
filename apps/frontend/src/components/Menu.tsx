@@ -2,10 +2,13 @@ import { ConnectWallet } from "@/components/Profile";
 import { useCreateGame } from "@/hooks/games/useCreateGame";
 import { useGetGames } from "@/hooks/games/useGetGames";
 
-export const Menu = (props: { sidebarOpen?: boolean }) => {
+export const Menu = (props: {
+  sidebarOpen?: boolean;
+  setSidebarOpen?: (val: boolean) => void;
+}) => {
   const createNewGame = useCreateGame();
-  // const getGames = useGetGames();
-  console.log("____", createNewGame.data);
+  const getGames = useGetGames();
+
   return (
     <div
       id="sidebar"
@@ -18,7 +21,14 @@ export const Menu = (props: { sidebarOpen?: boolean }) => {
         <ul className="p-4 flex flex-col gap-4">
           <ConnectWallet />
           <button
-            onClick={() => createNewGame.mutate()}
+            disabled={
+              !getGames.data?.[getGames.data.length - 1]?.winnerId &&
+              getGames.data?.length !== 0
+            }
+            onClick={() => {
+              createNewGame.mutate();
+              props.setSidebarOpen?.(false);
+            }}
             className="bg-blue-400"
           >
             Start a new game

@@ -7,14 +7,24 @@ export const useCreateMove = (props?: {
 }) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (variables: { gameId: string; playerId: string }) => {
+    mutationFn: async (variables: {
+      gameId: string;
+      playerId: string;
+      xCoordinate: number;
+      yCoordinate: number;
+    }) => {
       const result = await apiClient[
         "/games/{gameId}/players/{playerId}/moves"
       ].post({
         params: { gameId: variables.gameId, playerId: variables.playerId },
+        json: {
+          xCoordinate: variables.xCoordinate,
+          yCoordinate: variables.yCoordinate,
+        },
       });
       await queryClient.invalidateQueries();
-      return result;
+      const resultParsed = await result.json();
+      return resultParsed;
     },
     onError: (error) => {
       console.error("Error creating move", error);
