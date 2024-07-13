@@ -335,6 +335,93 @@ export default {
           }
         }
       }
+    },
+    "/games/{gameId}/players/{playerId}/moves": {
+      "post": {
+        "operationId": "createMove",
+        "summary": "Create move",
+        "tags": [
+          "Moves"
+        ],
+        "description": "Create a move",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "gameId",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "playerId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "xCoordinate": {
+                    "type": "number"
+                  },
+                  "yCoordinate": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "xCoordinate",
+                  "yCoordinate"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created move successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "playerId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "xCoordinate": {
+                      "type": "number"
+                    },
+                    "yCoordinate": {
+                      "type": "number"
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "playerId",
+                    "xCoordinate",
+                    "yCoordinate",
+                    "createdAt"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 } as const;
