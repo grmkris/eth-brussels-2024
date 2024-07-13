@@ -34,7 +34,7 @@ dataSources:
           handler: handleOwnershipTransferred
         - event: Paused(address)
           handler: handlePaused
-        - event: Transferred(indexed address,bytes16,address,address,uint256,address)
+        - event: Transferred((uint256,uint256,address,address,address,uint256,bytes16,address,bytes,bytes),address,uint256,address)
           handler: handleTransferred
         - event: Unpaused(address)
           handler: handleUnpaused
