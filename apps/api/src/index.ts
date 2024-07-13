@@ -3,6 +3,8 @@ import { cors } from "hono/cors";
 import { swaggerUI } from "@hono/swagger-ui";
 import { requestMiddleware } from "./middlewares/middleware";
 import playerRoutes from "./features/players/playersRouter";
+import gameRoutes from "./features/games/gamesRouter";
+import moveRoutes from "./features/moves/movesRouter";
 
 const app = new OpenAPIHono();
 
@@ -17,6 +19,8 @@ app.use("*",
 app.use("*", requestMiddleware);
 
 app.route("/", playerRoutes);
+app.route("/", gameRoutes);
+app.route("/", moveRoutes);
 
 app.doc("/doc", {
     openapi: "3.0.0",
