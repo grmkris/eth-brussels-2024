@@ -421,8 +421,7 @@ export default {
                     "type": "object",
                     "properties": {
                       "id": {
-                        "type": "string",
-                        "format": "uuid"
+                        "type": "string"
                       },
                       "status": {
                         "type": "string",
@@ -433,8 +432,7 @@ export default {
                       },
                       "winnerId": {
                         "type": "string",
-                        "nullable": true,
-                        "format": "uuid"
+                        "nullable": true
                       },
                       "createdAt": {
                         "type": "string"
@@ -473,8 +471,7 @@ export default {
                   "type": "object",
                   "properties": {
                     "id": {
-                      "type": "string",
-                      "format": "uuid"
+                      "type": "string"
                     },
                     "status": {
                       "type": "string",
@@ -485,8 +482,7 @@ export default {
                     },
                     "winnerId": {
                       "type": "string",
-                      "nullable": true,
-                      "format": "uuid"
+                      "nullable": true
                     },
                     "createdAt": {
                       "type": "string"
