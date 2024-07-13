@@ -14,6 +14,7 @@ import {
   parseEther,
   zeroAddress,
 } from "viem";
+import { sepolia } from "viem/chains";
 
 const TRANSFER_CONTRACT_ADDRESS = "0xb0CAC7DAF0D76569913e670D942dB4359E6E4E61"; // sepolia
 const OPERATOR_CONTRACT_ADDRESS = "0x29739a454FDe98454690427e960518b15029599C"; // sepolia
@@ -26,13 +27,13 @@ export const usePlayPosition = (props?: {
   const publicClient = usePublicClient();
   const { data: walletClient } = useWalletClient();
   const account = useAccount();
-  const chain = useChainId();
 
   return useMutation({
     mutationFn: async (variables: { position: string }) => {
       if (!account.address) throw new Error("No account address");
       if (!variables.position) throw new Error("No position description");
       if (!walletClient) throw new Error("No wallet client");
+      if (!publicClient) throw new Error("No public client");
 
       const result = await apiClient["/players/payment-signature"].post({
         json: {
@@ -53,12 +54,29 @@ export const usePlayPosition = (props?: {
       const prefix = keccak256(encodePacked(["string"], [variables.position]));
 
       console.log("Partameters", {
-        id,
-        signature,
-        deadline,
-        prefix,
+        account: account.address.toLocaleLowerCase(),
+        address: TRANSFER_CONTRACT_ADDRESS.toLocaleLowerCase() as Address,
+        abi: TransferAbi,
+        functionName: "transferTokenPreApproved",
+        args: [
+          {
+            id: id as Address,
+            deadline: BigInt(deadline),
+            signature: signature as Address,
+            refundDestination:
+              OPERATOR_CONTRACT_ADDRESS.toLocaleLowerCase() as Address,
+            recipientCurrency: "0x193C77Ad6191b935D8AcbB4fE2f7f4345545acd5",
+            prefix: "0x",
+            recipientAmount: parseEther("2"),
+            feeAmount: parseEther("0.2"),
+            operator: OPERATOR_CONTRACT_ADDRESS.toLocaleLowerCase() as Address,
+            recipient: OPERATOR_CONTRACT_ADDRESS.toLocaleLowerCase() as Address,
+          },
+        ],
       });
-      const { request } = await publicClient.simulateContract({
+
+      const res = await publicClient.simulateContract({
+        chain: sepolia,
         account: account.address,
         address: TRANSFER_CONTRACT_ADDRESS.toLocaleLowerCase() as Address,
         abi: TransferAbi,
@@ -70,19 +88,21 @@ export const usePlayPosition = (props?: {
             signature: signature as Address,
             refundDestination:
               OPERATOR_CONTRACT_ADDRESS.toLocaleLowerCase() as Address,
-            recipientCurrency: zeroAddress,
-            prefix,
-            recipientAmount: parseEther("0.001"),
-            feeAmount: parseEther("0.0001"),
+            recipientCurrency: "0x193C77Ad6191b935D8AcbB4fE2f7f4345545acd5",
+            prefix: "0x",
+            recipientAmount: parseEther("2"),
+            feeAmount: parseEther("0.2"),
             operator: OPERATOR_CONTRACT_ADDRESS.toLocaleLowerCase() as Address,
             recipient: OPERATOR_CONTRACT_ADDRESS.toLocaleLowerCase() as Address,
           },
         ],
       });
 
+      console.log("RESULT: ", res.result);
+
       const txHash = await walletClient.writeContract({
         // https://1.x.wagmi.sh/react/hooks/useContractWrite
-        ...request,
+        ...res.request,
         account: walletClient.account,
       });
 
@@ -93,7 +113,7 @@ export const usePlayPosition = (props?: {
       return result;
     },
     onError: (error) => {
-      console.error("Error creating player", error);
+      console.error("Error creating player", error, error.message);
       props?.onError?.();
     },
     onSuccess: () => {

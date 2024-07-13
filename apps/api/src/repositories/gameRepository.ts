@@ -18,10 +18,7 @@ export const gameRepository = (config: {
     };
 
     const findMany = async (): Promise<SelectGame[]> => {
-        const games = await db
-            .select()
-            .from(Games)
-            .execute();
+        const games = await db.query.Games.findMany();
 
         return games;
     }
@@ -48,7 +45,7 @@ export const gameRepository = (config: {
     }): Promise<SelectGame> => {
         const updatedGame = await db
             .update(Games)
-            .set(props.updateData)
+            .set({...props.updateData, updatedAt: new Date()})
             .where(eq(Games.id, props.id))
             .returning()
             .execute();
