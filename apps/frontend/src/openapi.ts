@@ -78,70 +78,51 @@ export default {
     },
     "/players": {
       "post": {
-        "operationId": "createPlayer",
-        "summary": "Create player",
+        "operationId": "verifyWorldIdPlayer",
+        "summary": "Verify WORLDID player",
         "tags": [
           "Players"
         ],
-        "description": "Create a player",
+        "description": "Verify worldID player signature",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "Bearer SECRET"
+            },
+            "required": true,
+            "name": "authorization",
+            "in": "header"
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "address": {
-                    "type": "string"
+                  "worldCoinSignature": {
+                    "nullable": true
                   }
-                },
-                "required": [
-                  "address"
-                ]
+                }
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Created player successfully.",
+            "description": "Verified player successfully.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "id": {
-                      "type": "string",
-                      "format": "uuid"
-                    },
-                    "address": {
-                      "type": "string"
-                    },
-                    "challenge": {
-                      "type": "string"
-                    },
-                    "signatureVerified": {
-                      "type": "boolean",
-                      "nullable": true
-                    },
-                    "worldcoinVerified": {
-                      "type": "boolean",
-                      "nullable": true
-                    },
-                    "lastMove": {
-                      "type": "string"
-                    },
-                    "createdAt": {
-                      "type": "string"
+                    "ok": {
+                      "type": "boolean"
                     }
                   },
                   "required": [
-                    "id",
-                    "address",
-                    "challenge",
-                    "signatureVerified",
-                    "worldcoinVerified",
-                    "lastMove",
-                    "createdAt"
+                    "ok"
                   ]
                 }
               }
