@@ -10,10 +10,10 @@ export const gamesService = (deps: {
 }) => {
     const retrieveGame = async (props: {
         id: string;
-        xCoordinate: number;
-        yCoordinate: number;
-        size: number;
     }) => {
+        // Hardcoded size
+        const size = 100;
+
         // Get the game
         const game = await deps.gameRepository.findOneById({
             id: props.id,
@@ -31,7 +31,7 @@ export const gamesService = (deps: {
         });
 
         // Create a 2D array
-        let board = create2DArray(props.size, props.size);
+        let board = create2DArray(size, size);
 
         // Apply moves to the board
         applyMoves(board, moves);
