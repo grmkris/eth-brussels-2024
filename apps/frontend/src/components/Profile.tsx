@@ -23,7 +23,7 @@ export const SignInWithWallet = () => {
   const connectPlayer = useConnectPlayer();
   const account = useAccount();
 
-  if (!account) {
+  if (!account.address) {
     return <>Wallet not detected</>;
   }
 
