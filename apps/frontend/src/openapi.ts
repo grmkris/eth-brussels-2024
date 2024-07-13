@@ -598,6 +598,10 @@ export default {
                       "type": "string",
                       "format": "uuid"
                     },
+                    "gameId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
                     "playerId": {
                       "type": "string",
                       "format": "uuid"
@@ -625,6 +629,7 @@ export default {
                   },
                   "required": [
                     "id",
+                    "gameId",
                     "playerId",
                     "xCoordinate",
                     "yCoordinate",
