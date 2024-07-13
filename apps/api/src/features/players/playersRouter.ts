@@ -4,13 +4,12 @@ import { extractMiddleware } from "../../middlewares/middleware";
 import { Address, Signature } from "viem";
 
 const collectionPath = "/players";
-const detailPath = collectionPath + "/{id}";
 
 const playerRoutes = new OpenAPIHono();
 
 export const retrievePlayerByAddress = createRoute({
   method: "get",
-  path: detailPath,
+  path: collectionPath + "/{address}",
   operationId: "retrievePlayerByAddress",
   summary: "Retrieve player",
   tags: ["Players"],

@@ -9,7 +9,7 @@ export default {
     "parameters": {}
   },
   "paths": {
-    "/players/{id}": {
+    "/players/{address}": {
       "get": {
         "operationId": "retrievePlayerByAddress",
         "summary": "Retrieve player",
