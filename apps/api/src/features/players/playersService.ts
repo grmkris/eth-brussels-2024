@@ -39,7 +39,6 @@ export const playersService = (deps: {
   const requestSignature = async (props: {
     senderAddress: string;
     transferContractAddress: string;
-    positionString: string;
   }) => {
     // deadline is 100 blocks from now
     const deadline =
@@ -51,8 +50,6 @@ export const playersService = (deps: {
     const refundDestination = mnemonicToAccount(
       env.DB_OPERATOR_MNEMONIC
     ).address;
-    const prefix = props.positionString;
-    const totalAmount = recipientAmount + feeAmount;
 
     const intentHash = keccak256(
       // backend
@@ -93,7 +90,7 @@ export const playersService = (deps: {
       account: operatorClient.account,
     });
 
-    return { signature };
+    return { signature, id };
   };
 
   return {

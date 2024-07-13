@@ -75,7 +75,6 @@ export const requestSignature = createRoute({
           schema: z.object({
             senderAddress: z.string(),
             transferContractAddress: z.string(),
-            positionString: z.string(),
           }),
         },
       },
@@ -86,6 +85,7 @@ export const requestSignature = createRoute({
       content: {
         "application/json": {
           schema: z.object({
+            id: z.string(),
             signature: z.string(),
           }),
         },
@@ -119,13 +119,12 @@ playerRoutes.openapi(createPlayerRoute, async (c) => {
 
 playerRoutes.openapi(requestSignature, async (c) => {
   const { playersService } = extractMiddleware(c);
-  const { senderAddress, transferContractAddress, positionString } =
+  const { senderAddress, transferContractAddress } =
     c.req.valid("json");
 
   const signature = await playersService.requestSignature({
     senderAddress,
     transferContractAddress,
-    positionString,
   });
 
   return c.json(signature, 201);

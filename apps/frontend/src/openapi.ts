@@ -81,15 +81,11 @@ export default {
                   },
                   "transferContractAddress": {
                     "type": "string"
-                  },
-                  "positionString": {
-                    "type": "string"
                   }
                 },
                 "required": [
                   "senderAddress",
-                  "transferContractAddress",
-                  "positionString"
+                  "transferContractAddress"
                 ]
               }
             }
@@ -103,11 +99,15 @@ export default {
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "id": {
+                      "type": "string"
+                    },
                     "signature": {
                       "type": "string"
                     }
                   },
                   "required": [
+                    "id",
                     "signature"
                   ]
                 }
