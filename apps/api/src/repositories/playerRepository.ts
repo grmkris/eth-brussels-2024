@@ -6,7 +6,9 @@ import { eq } from "drizzle-orm";
 export const playerRepository = (config: { db: db }) => {
   const { db } = config;
 
-  const findOneById = async (props: { id: string }): Promise<SelectPlayer | undefined> => {
+  const findOneById = async (props: {
+    id: string;
+  }): Promise<SelectPlayer | undefined> => {
     const player = await db.query.Players.findFirst({
       where: eq(Players.id, props.id),
     });
@@ -14,24 +16,31 @@ export const playerRepository = (config: { db: db }) => {
     return player;
   };
 
-  const findManyByGameId = async (props: { gameId: string }): Promise<SelectPlayer[]> => {
-    const players = await db
+  const findManyByGameId = async (props: {
+    gameId: string;
+  }): Promise<SelectPlayer[]> => {
+    return await db
       .select({
         id: Players.id,
         address: Players.address,
         lastMove: Players.lastMove,
         createdAt: Players.createdAt,
+        worldcoinVerified: Players.worldcoinVerified,
+        signatureVerified: Players.signatureVerified,
+        challenge: Players.challenge,
       })
       .from(Players)
       .innerJoin(GamePlayers, eq(GamePlayers.playerId, Players.id))
       .where(eq(GamePlayers.gameId, props.gameId))
       .execute();
-
-    return players;
   };
 
   const create = async (props: CreatePlayer): Promise<SelectPlayer> => {
-    const createdPlayer = await db.insert(Players).values(props).returning().execute();
+    const createdPlayer = await db
+      .insert(Players)
+      .values(props)
+      .returning()
+      .execute();
 
     if (createdPlayer.length < 1) {
       throw new Error("Failed to create player");
@@ -40,7 +49,9 @@ export const playerRepository = (config: { db: db }) => {
     return createdPlayer[0];
   };
 
-  const findByAddress = async (props: { address: string }): Promise<SelectPlayer | undefined> => {
+  const findByAddress = async (props: {
+    address: string;
+  }): Promise<SelectPlayer | undefined> => {
     const player = await db.query.Players.findFirst({
       where: eq(Players.address, props.address),
     });
@@ -48,17 +59,21 @@ export const playerRepository = (config: { db: db }) => {
     return player;
   };
 
-  const update = async (props: { address: string; signatureVerified: boolean; worldcoinVerified: boolean }) => {
+  const update = async (props: {
+    address: string;
+    signatureVerified: boolean;
+    worldcoinVerified: boolean;
+  }) => {
     const updatedPlayer = await db
       .update(Players)
-      .set({ ...props })
+      .set(props)
       .where(eq(Players.address, props.address))
       .returning()
       .execute();
     if (!updatedPlayer) {
-      throw Error();
+      throw new Error("Failed to update player");
     }
-    return updatedPlayer;
+    return updatedPlayer[0];
   };
   return {
     findOneById,

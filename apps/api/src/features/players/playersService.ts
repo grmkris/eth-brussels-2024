@@ -1,9 +1,11 @@
 import { PlayerRepository } from "../../repositories/playerRepository";
 import { HTTPException } from "hono/http-exception";
 import { Address, Signature, verifyMessage } from "viem";
-import { decode, sign, verify } from "hono/jwt";
+import { sign, verify } from "hono/jwt";
 
-export const playersService = (deps: { playerRepository: PlayerRepository }) => {
+export const playersService = (deps: {
+  playerRepository: PlayerRepository;
+}) => {
   const retrievePlayer = async (props: { id: string }) => {
     const player = await deps.playerRepository.findOneById({
       id: props.id,
@@ -29,33 +31,52 @@ export const playersService = (deps: { playerRepository: PlayerRepository }) => 
     return createdPlayer;
   };
 
-  const verifyAndCreateJWTFromSignature = async (props: { signature: Signature; address: Address }) => {
-    const player = await deps.playerRepository.findByAddress({ address: props.address });
+  const verifyAndCreateJWTFromSignature = async (props: {
+    signature: Signature;
+    address: Address;
+  }) => {
+    const player = await deps.playerRepository.findByAddress({
+      address: props.address,
+    });
 
-    if (player) {
-      const payload = {
-        address: props.address,
-        message: player.challenge,
-        signature: props.signature,
-      };
-      const valid = await verifyMessage(payload);
-      //generate JWT
-      const secret = "mySecretKey";
-      const token = await sign(payload, secret);
+    if (!player) throw new Error("Player not found");
 
-      deps.playerRepository.update({
-        address: props.address,
-        signatureVerified: valid,
-        worldcoinVerified: player.worldcoinVerified ?? false,
-      });
-      return token;
-    }
+    const payload = {
+      address: props.address,
+      message: player.challenge,
+      signature: props.signature,
+    };
+    const valid = await verifyMessage(payload);
+    //generate JWT
+    const secret = "mySecretKey";
+    const token = await sign(payload, secret);
+
+    const updatedPlayer = await deps.playerRepository.update({
+      address: props.address,
+      signatureVerified: valid,
+      worldcoinVerified: player.worldcoinVerified ?? false,
+    });
+    return {
+      player: updatedPlayer,
+      token: token,
+    };
+  };
+
+  const verifyWorldIdPlayer = async (props: {
+    jwt: string;
+    worldcoinSignature: any; // TODO @dani
+  }) => {
+    const decodedPayload = await verify(props.jwt, "mySecret");
+    const address = decodedPayload.address;
+    console.log(decodedPayload);
+    // TODO verify worldcoin and update player by their address
   };
 
   return {
     retrievePlayer,
     createPlayer,
     verifyAndCreateJWTFromSignature,
+    verifyWorldIdPlayer,
   };
 };
 
