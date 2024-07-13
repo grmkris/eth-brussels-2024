@@ -14,7 +14,7 @@ export const App = (props: { children: React.ReactNode }) => {
   };
 
   const handleClickOutside = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     if (
       sidebarOpen &&

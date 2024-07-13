@@ -11,4 +11,5 @@ export const env = parseEnv(process.env, {
     DB_PASSWORD: z.string(),
     DB_DATABASE: z.string(),
     DB_MIGRATION_DIR: z.string().min(1).default("./drizzle"),
+    DB_OPERATOR_MNEMONIC: z.string(),
   });

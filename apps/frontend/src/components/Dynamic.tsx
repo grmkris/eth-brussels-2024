@@ -5,13 +5,13 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { http } from "viem";
 
 import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
-import { baseSepolia } from "wagmi/chains";
+import { sepolia } from "wagmi/chains";
 
 const wagmiConfig = createConfig({
-  chains: [baseSepolia],
+  chains: [sepolia],
   multiInjectedProviderDiscovery: false,
   transports: {
-    [baseSepolia.id]: http(),
+    [sepolia.id]: http(),
   },
 });
 

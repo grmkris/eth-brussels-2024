@@ -95,6 +95,41 @@ export const verifyPlayerSignatureRoute = createRoute({
   },
 });
 
+export const requestPaymentSignature = createRoute({
+  method: "post",
+  path: `${collectionPath}/payment-signature`,
+  operationId: "requestPaymentSignature",
+  summary: "Request payment signature",
+  tags: ["Players"],
+  description: "Request a signature for a player playing",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z.object({
+            senderAddress: z.string(),
+            transferContractAddress: z.string(),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    201: {
+      content: {
+        "application/json": {
+          schema: z.object({
+            id: z.string(),
+            signature: z.string(),
+            deadline: z.string(),
+          }),
+        },
+      },
+      description: "Requested payment signature successfully.",
+    },
+  },
+});
+            
 export const verifyWorldIdPlayerRoute = createRoute({
   method: "post",
   path: collectionPath + "/verify-worldcoin",
@@ -113,7 +148,7 @@ export const verifyWorldIdPlayerRoute = createRoute({
       content: {
         "application/json": {
           schema: z.object({
-            worldCoinSignature: z.any(), // TODO @daniel
+            worldCoinSignature: z.unknown(), // TODO @daniel
           }),
         },
       },
@@ -183,6 +218,18 @@ playerRoutes.openapi(verifyWorldIdPlayerRoute, async (c) => {
     },
     201,
   );
+});
+
+playerRoutes.openapi(requestPaymentSignature, async (c) => {
+  const { playersService } = extractMiddleware(c);
+  const { senderAddress, transferContractAddress } = c.req.valid("json");
+
+  const data = await playersService.requestPaymentSignature({
+    senderAddress,
+    transferContractAddress,
+  });
+
+  return c.json(data, 201);
 });
 
 export default playerRoutes;

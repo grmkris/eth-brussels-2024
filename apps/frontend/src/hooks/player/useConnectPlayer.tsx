@@ -52,9 +52,10 @@ export const useConnectWorldCoinPlayer = (props?: {
 }) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async () => {
+    mutationFn: async (variables: { worldCoinSignature: unknown }) => {
       const result = await apiClient["/players/verify-worldcoin"].post({
-        json: { worldCoinSignature: "TODO" },
+        // @ts-ignore
+        json: { worldCoinSignature: variables.worldCoinSignature },
         headers: {
           authorization: `Bearer ${localStorage.getItem("token")}`,
         },
