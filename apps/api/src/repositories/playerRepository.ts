@@ -67,7 +67,7 @@ export const playerRepository = (config: { db: db }) => {
     const updatedPlayer = await db
       .update(Players)
       .set({ ...props, address: getAddress(props.address) })
-      .where(eq(Players.address, props.address))
+      .where(eq(Players.address, getAddress(props.address)))
       .returning()
       .execute();
 
