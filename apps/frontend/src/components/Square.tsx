@@ -4,6 +4,7 @@ import { useGetGames } from "@/hooks/games/useGetGames";
 import { useCreateMove } from "@/hooks/moves/useCreateMove";
 import { CalculateUuidToNumber } from "@/utils/CalculateUuidToNumber";
 import { PlayersOutput } from "@/schemas/playerSchemas";
+import { usePlayPosition } from "@/hooks/actions/usePlayPosition";
 
 export const Square = ({
   size,
@@ -23,6 +24,11 @@ export const Square = ({
     "none" | "scaling" | "pulse"
   >("none");
   const move = useCreateMove({
+    onSuccess: () => {
+      setHasIcon(true);
+    },
+  });
+  const playPosition = usePlayPosition({
     onSuccess: () => {
       setHasIcon(true);
     },
@@ -47,13 +53,16 @@ export const Square = ({
     }
   }, [hasIcon]);
 
-  const handleClick = () => {
+  const handleClick = async () => {
     if (
       player?.id &&
       getGames.data?.[getGames.data.length - 1].id &&
       row &&
       column
     ) {
+      await playPosition.mutateAsync({
+        position: `${row},${column}`,
+      });
       move.mutate({
         playerId: player?.id ?? "",
         gameId: getGames.data?.[getGames.data.length - 1].id ?? "",

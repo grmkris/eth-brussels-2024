@@ -10,7 +10,6 @@ import {
 import { Erc20Abi, TransferAbi } from "@/abi/transfer.abi";
 import { Address, encodePacked, keccak256, parseEther } from "viem";
 import { sepolia } from "viem/chains";
-import { waitForTransactionReceipt } from "viem/actions";
 
 const TRANSFER_CONTRACT_ADDRESS = "0xb90d5c07BF97883821767c31aFc9dd4adfc0BF0C"; // sepolia
 const OPERATOR_CONTRACT_ADDRESS = "0x29739a454FDe98454690427e960518b15029599C"; // sepolia
