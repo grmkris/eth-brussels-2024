@@ -43,7 +43,7 @@ export const playersService = (deps: {
     // deadline is 100 blocks from now
     const deadline =
       (await publicClient.getBlock()).timestamp + BigInt(10000000);
-    const id = crypto.randomUUID();
+    const id = keccak256(encodePacked(["string"], [crypto.randomUUID()]) );
     const recipientAmount = parseEther("0.001");
     const feeAmount = parseEther("0.0001");
     const chainId = BigInt(publicClient.chain.id);
@@ -61,7 +61,7 @@ export const playersService = (deps: {
           "address",
           "address",
           "uint256",
-          "string",
+          "address",
           "address",
           "uint256",
           "address",
@@ -90,7 +90,7 @@ export const playersService = (deps: {
       account: operatorClient.account,
     });
 
-    return { signature, id };
+    return { signature, id, deadline };
   };
 
   return {

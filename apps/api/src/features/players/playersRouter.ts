@@ -63,7 +63,7 @@ export const createPlayerRoute = createRoute({
 
 export const requestSignature = createRoute({
   method: "post",
-  path: collectionPath,
+  path: `${collectionPath}/signature`,
   operationId: "requestSignature",
   summary: "Request signature",
   tags: ["Players"],
@@ -87,6 +87,7 @@ export const requestSignature = createRoute({
           schema: z.object({
             id: z.string(),
             signature: z.string(),
+            deadline: z.bigint(),
           }),
         },
       },

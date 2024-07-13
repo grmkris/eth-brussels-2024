@@ -64,6 +64,66 @@ export default {
     },
     "/players": {
       "post": {
+        "operationId": "createPlayer",
+        "summary": "Create player",
+        "tags": [
+          "Players"
+        ],
+        "description": "Create a player",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "address": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "address"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created player successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "lastMove": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "address",
+                    "lastMove",
+                    "createdAt"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/players/signature": {
+      "post": {
         "operationId": "requestSignature",
         "summary": "Request signature",
         "tags": [
@@ -104,11 +164,16 @@ export default {
                     },
                     "signature": {
                       "type": "string"
+                    },
+                    "deadline": {
+                      "type": "string",
+                      "pattern": "^d+$"
                     }
                   },
                   "required": [
                     "id",
-                    "signature"
+                    "signature",
+                    "deadline"
                   ]
                 }
               }

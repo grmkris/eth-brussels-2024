@@ -4,6 +4,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Dynamic from "@/components/Dynamic";
 import { useState } from "react";
 import { ConnectWallet } from "@/components/Profile";
+import { usePlayPosition } from "../hooks/actions/usePlayPosition";
 
 export const App = (props: { children: React.ReactNode }) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -14,7 +15,7 @@ export const App = (props: { children: React.ReactNode }) => {
   };
 
   const handleClickOutside = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     if (
       sidebarOpen &&
