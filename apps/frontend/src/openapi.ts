@@ -70,16 +70,23 @@ export default {
           "Players"
         ],
         "description": "Create a player",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "required": true,
-            "name": "address",
-            "in": "path"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "address": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "address"
+                ]
+              }
+            }
           }
-        ],
+        },
         "responses": {
           "201": {
             "description": "Created player successfully.",

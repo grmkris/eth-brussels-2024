@@ -39,9 +39,15 @@ export const createPlayerRoute = createRoute({
     tags: ["Players"],
     description: "Create a player",
     request: {
-        params: z.object({
-            address: z.string(),
-        }),
+        body: {
+            content: {
+                "application/json": {
+                    schema: z.object({
+                        address: z.string(),
+                    })
+                }
+            }
+        },
     },
     responses: {
         201: {
@@ -68,7 +74,7 @@ playerRoutes.openapi(retrievePlayerRoute, async (c) => {
 
 playerRoutes.openapi(createPlayerRoute, async (c) => {
     const { playersService } = extractMiddleware(c);
-    const { address } = c.req.valid("param");
+    const { address } = c.req.valid("json");
 
     const player = await playersService.createPlayer({
         address,
