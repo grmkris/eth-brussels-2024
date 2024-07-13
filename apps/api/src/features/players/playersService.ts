@@ -20,15 +20,39 @@ export const playersService = (deps: {
     return player;
   };
 
-  const createPlayer = async (props: { address: string }) => {
-    const createdPlayer = await deps.playerRepository.create({
+  const getPlayerByAddress = async (props: { address: string }) => {
+    const player = await deps.playerRepository.findByAddress({
+      address: props.address,
+    });
+
+    if (!player) {
+      throw new HTTPException(404, {
+        message: "Player not found",
+      });
+    }
+
+    return player;
+  };
+
+  const getOrCreatePlayerByAddress = async (props: { address: string }) => {
+    const player = await deps.playerRepository.findByAddress({
+      address: props.address,
+    });
+    if (player) {
+      // if signature is verified, create new challenge and update player with new challenge
+      if (player.signatureVerified) {
+        return await deps.playerRepository.update({
+          address: props.address,
+          challenge: crypto.randomUUID(),
+        });
+      }
+    }
+    return await deps.playerRepository.create({
       address: props.address,
       challenge: crypto.randomUUID(),
       signatureVerified: false,
       worldcoinVerified: false,
     });
-
-    return createdPlayer;
   };
 
   const verifyAndCreateJWTFromSignature = async (props: {
@@ -47,6 +71,7 @@ export const playersService = (deps: {
       signature: props.signature,
     };
     const valid = await verifyMessage(payload);
+    if (!valid) throw new Error("Invalid signature");
     //generate JWT
     const secret = "mySecretKey";
     const token = await sign(payload, secret);
@@ -66,7 +91,7 @@ export const playersService = (deps: {
     jwt: string;
     worldcoinSignature: any; // TODO @daniel
   }) => {
-    const decodedPayload = await verify(props.jwt, "mySecret");
+    const decodedPayload = await verify(props.jwt, "mySecretKey");
     const address = decodedPayload.address;
     console.log(decodedPayload);
     // TODO verify worldcoin and update player by their address TODO @daniel
@@ -74,9 +99,10 @@ export const playersService = (deps: {
 
   return {
     retrievePlayer,
-    createPlayer,
+    getOrCreatePlayerByAddress,
     verifyAndCreateJWTFromSignature,
     verifyWorldIdPlayer,
+    getPlayerByAddress,
   };
 };
 

@@ -1,19 +1,54 @@
 import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
-import { useSignMessage } from "wagmi";
+import { useAccount } from "wagmi";
 import WORLD from "./worlid";
+import {
+  useConnectPlayer,
+  useConnectWorldCoinPlayer,
+} from "@/hooks/player/useConnectPlayer";
 
 export function ConnectWallet() {
   return <Profile />;
 }
 
 const Profile = () => {
-  const signMessage = useSignMessage();
-
   return (
     <div className="fixed z-10 rounded-xlpt-4 p-4 w-fit">
-      <button onClick={() => signMessage.signMessage({ message: "Hello, world!" })}>Sign message</button>
+      <SignInWithWallet />
+      <TestWorldCoin />
       <WORLD />
       <DynamicWidget />
     </div>
+  );
+};
+
+export const SignInWithWallet = () => {
+  const connectPlayer = useConnectPlayer();
+  const account = useAccount();
+
+  if (!account) {
+    return <>Wallet not detected</>;
+  }
+
+  return (
+    <button
+      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      onClick={() =>
+        connectPlayer.mutate({ address: account.address as string })
+      }
+    >
+      Connect Wallet
+    </button>
+  );
+};
+
+export const TestWorldCoin = () => {
+  const connectWorldCoin = useConnectWorldCoinPlayer();
+  return (
+    <button
+      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      onClick={() => connectWorldCoin.mutate()}
+    >
+      TEST Connect World Coin
+    </button>
   );
 };
