@@ -1,6 +1,7 @@
 import { PlayerRepository } from "../../repositories/playerRepository";
 import { HTTPException } from "hono/http-exception";
 import { Address, Signature, verifyMessage } from "viem";
+import { decode, sign, verify } from "hono/jwt";
 
 export const playersService = (deps: { playerRepository: PlayerRepository }) => {
   const retrievePlayer = async (props: { id: string }) => {
@@ -32,19 +33,29 @@ export const playersService = (deps: { playerRepository: PlayerRepository }) => 
     const player = await deps.playerRepository.findByAddress({ address: props.address });
 
     if (player) {
-      const valid = verifyMessage({
+      const payload = {
         address: props.address,
         message: player.challenge,
         signature: props.signature,
-      });
+      };
+      const valid = await verifyMessage(payload);
       //generate JWT
-      return valid;
+      const secret = "mySecretKey";
+      const token = await sign(payload, secret);
+
+      deps.playerRepository.update({
+        address: props.address,
+        signatureVerified: valid,
+        worldcoinVerified: player.worldcoinVerified ?? false,
+      });
+      return token;
     }
   };
 
   return {
     retrievePlayer,
     createPlayer,
+    verifyAndCreateJWTFromSignature,
   };
 };
 

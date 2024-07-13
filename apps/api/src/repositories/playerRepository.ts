@@ -47,11 +47,25 @@ export const playerRepository = (config: { db: db }) => {
 
     return player;
   };
+
+  const update = async (props: { address: string; signatureVerified: boolean; worldcoinVerified: boolean }) => {
+    const updatedPlayer = await db
+      .update(Players)
+      .set({ ...props })
+      .where(eq(Players.address, props.address))
+      .returning()
+      .execute();
+    if (!updatedPlayer) {
+      throw Error();
+    }
+    return updatedPlayer;
+  };
   return {
     findOneById,
     findManyByGameId,
     create,
     findByAddress,
+    update,
   };
 };
 
