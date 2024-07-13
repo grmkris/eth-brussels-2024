@@ -1,15 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/apiClient";
-import { gameOutput } from "@/schemas/gameSchemas";
+import { gameOutput, gamesOutput } from "@/schemas/gameSchemas";
 
-export const useGetGames = (props: { id: string }) => {
+export const useGetGames = () => {
   return useQuery({
-    enabled: !!props.id,
+    // enabled: !!props.id,
     queryKey: ["useGetGames"],
     queryFn: async () => {
-      if (!props.id) throw new Error("No player id");
-      const player = await apiClient["/games"].get();
-      const parsedGame = gameOutput.safeParse(player);
+      // if (!props.id) throw new Error("No player id");
+      const games = await apiClient["/games"].get();
+      // console.log("_______", games);
+      const parsedGame = gamesOutput.safeParse(games);
       if (!parsedGame.success) {
         console.error("Failed to parse useGetGames", {
           data: parsedGame,

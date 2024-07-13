@@ -12,9 +12,12 @@ export const Games = z.object({
 });
 export const gameOutput = z.object({
   id: z.string().uuid(),
-  address: z.string(),
-  lastMove: z.string().datetime(),
+  status: z.string(),
+  winnerId: z.string().uuid().nullable(),
   createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
 });
+
+export const gamesOutput = z.array(gameOutput);
 
 export type GameOutput = z.infer<typeof gameOutput>;

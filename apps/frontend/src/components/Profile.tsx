@@ -12,7 +12,7 @@ export function ConnectWallet() {
 
 const Profile = () => {
   return (
-    <div className="fixed z-10 rounded-xlpt-4 p-4 w-fit">
+    <div>
       <SignInWithWallet />
       <TestWorldCoin />
       <WORLD />
