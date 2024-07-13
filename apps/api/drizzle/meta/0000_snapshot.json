@@ -1,5 +1,5 @@
 {
-  "id": "28bbaf36-7859-4cc7-8a6b-0bf6fd0204fa",
+  "id": "1f3a225c-eedc-4323-b8b8-33ed90dac9ce",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -215,7 +215,16 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "game_players_game_id_player_id_unique": {
+          "name": "game_players_game_id_player_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "game_id",
+            "player_id"
+          ]
+        }
+      }
     }
   },
   "enums": {},
