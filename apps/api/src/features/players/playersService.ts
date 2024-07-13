@@ -2,6 +2,9 @@ import { PlayerRepository } from "../../repositories/playerRepository";
 import { HTTPException } from "hono/http-exception";
 import { Address, Signature, verifyMessage } from "viem";
 import { decode, sign, verify } from "hono/jwt";
+import { handler } from "./verify";
+import { AnyColumn } from "drizzle-orm";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 export const playersService = (deps: { playerRepository: PlayerRepository }) => {
   const retrievePlayer = async (props: { id: string }) => {
@@ -52,10 +55,36 @@ export const playersService = (deps: { playerRepository: PlayerRepository }) => 
     }
   };
 
+  const verifyWorldProofFromSignature = async (props: { signature: Signature; address: Address; req: any }) => {
+    const player = await deps.playerRepository.findByAddress({ address: props.address });
+
+    if (player) {
+      const res: Partial<NextApiResponse> = {
+        status: (code: number) => {
+          res.statusCode = code;
+          return res;
+        },
+        json: (data: any) => {
+          res.data = data;
+          return res;
+        },
+        statusCode: 200,
+        data: null,
+      };
+
+      await new Promise<void>((resolve, reject) => {
+        handler(props.req, res as NextApiResponse)
+          .then(resolve)
+          .catch(reject);
+      });
+    }
+  };
+
   return {
     retrievePlayer,
     createPlayer,
     verifyAndCreateJWTFromSignature,
+    verifyWorldProofFromSignature,
   };
 };
 
