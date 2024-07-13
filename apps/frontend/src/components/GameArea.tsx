@@ -75,6 +75,7 @@ export const GameArea = ({
     <div
       ref={gameAreaRef}
       onWheel={handleWheel}
+      className="scrollable-sm"
       style={{
         overflow: "auto",
         height: "100vh",
