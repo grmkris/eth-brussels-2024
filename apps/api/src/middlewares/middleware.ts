@@ -41,6 +41,8 @@ export const requestMiddleware = createMiddleware(async (c, next) => {
         movesService({
             gamePlayerRepository: gamePlayerRepositoryInstance,
             moveRepository: moveRepositoryInstance,
+            gameRepository: gameRepositoryInstance,
+            playerRepository: playerRepositoryInstance,
         })
     );
 

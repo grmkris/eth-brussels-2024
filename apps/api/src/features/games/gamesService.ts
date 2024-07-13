@@ -1,6 +1,6 @@
 import { GameRepository } from "../../repositories/gameRepository"
 import { MoveRepository } from "../../repositories/moveRepository";
-import { applyMoves, create2DArray } from "../../utils/mappingHelper";
+import { applyMoves, create2DArray } from "../../helpers/mappingHelper";
 import { HTTPException } from "hono/http-exception";
 
 

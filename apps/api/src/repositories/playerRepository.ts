@@ -23,11 +23,11 @@ export const playerRepository = (config: { db: db }) => {
       .select({
         id: Players.id,
         address: Players.address,
+        challenge: Players.challenge,
+        signatureVerified: Players.signatureVerified,
+        worldcoinVerified: Players.worldcoinVerified,
         lastMove: Players.lastMove,
         createdAt: Players.createdAt,
-        worldcoinVerified: Players.worldcoinVerified,
-        signatureVerified: Players.signatureVerified,
-        challenge: Players.challenge,
       })
       .from(Players)
       .innerJoin(GamePlayers, eq(GamePlayers.playerId, Players.id))
@@ -71,17 +71,36 @@ export const playerRepository = (config: { db: db }) => {
       .where(eq(Players.address, props.address))
       .returning()
       .execute();
+
     if (!updatedPlayer) {
       throw new Error("Failed to update player");
     }
     return updatedPlayer[0];
   };
+
+  const updateLastMove = async (props: {
+    id: string;
+  }): Promise<SelectPlayer> => {
+    const updatedPlayer = await db
+      .update(Players)
+      .set({ lastMove: new Date() })
+      .where(eq(Players.id, props.id))
+      .returning()
+      .execute();
+
+    if (!updatedPlayer) {
+      throw new Error("Failed to update player last move");
+    }
+    return updatedPlayer[0];
+  };
+
   return {
     findOneById,
     findManyByGameId,
     create,
     findByAddress,
     update,
+    updateLastMove,
   };
 };
 
