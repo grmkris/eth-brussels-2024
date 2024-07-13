@@ -61,8 +61,9 @@ export const playerRepository = (config: { db: db }) => {
 
   const update = async (props: {
     address: string;
-    signatureVerified: boolean;
-    worldcoinVerified: boolean;
+    signatureVerified?: boolean;
+    worldcoinVerified?: boolean;
+    challenge?: string;
   }) => {
     const updatedPlayer = await db
       .update(Players)

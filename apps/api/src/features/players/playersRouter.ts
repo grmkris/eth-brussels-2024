@@ -8,16 +8,16 @@ const detailPath = collectionPath + "/{id}";
 
 const playerRoutes = new OpenAPIHono();
 
-export const retrievePlayerRoute = createRoute({
+export const retrievePlayerByAddress = createRoute({
   method: "get",
   path: detailPath,
-  operationId: "retrievePlayer",
+  operationId: "retrievePlayerByAddress",
   summary: "Retrieve player",
   tags: ["Players"],
-  description: "Retrieve a player by ID",
+  description: "Retrieve a player by address",
   request: {
     params: z.object({
-      id: z.string(),
+      address: z.string(),
     }),
   },
   responses: {
@@ -32,13 +32,13 @@ export const retrievePlayerRoute = createRoute({
   },
 });
 
-export const createPlayerRoute = createRoute({
+export const connectPlayerRoute = createRoute({
   method: "post",
-  path: collectionPath,
-  operationId: "createPlayer",
-  summary: "Create player",
+  path: collectionPath + "/connect",
+  operationId: "connectPlayer",
+  summary: "Connect player",
   tags: ["Players"],
-  description: "Create a player",
+  description: "Connect player",
   request: {
     body: {
       content: {
@@ -64,7 +64,7 @@ export const createPlayerRoute = createRoute({
 
 export const verifyPlayerSignatureRoute = createRoute({
   method: "post",
-  path: collectionPath,
+  path: collectionPath + "/verify-signature",
   operationId: "verifyPlayerSignature",
   summary: "Verify player",
   tags: ["Players"],
@@ -98,7 +98,7 @@ export const verifyPlayerSignatureRoute = createRoute({
 
 export const verifyWorldIdPlayerRoute = createRoute({
   method: "post",
-  path: collectionPath,
+  path: collectionPath + "/verify-worldcoin",
   operationId: "verifyWorldIdPlayer",
   summary: "Verify WORLDID player",
   tags: ["Players"],
@@ -134,22 +134,22 @@ export const verifyWorldIdPlayerRoute = createRoute({
   },
 });
 
-playerRoutes.openapi(retrievePlayerRoute, async (c) => {
+playerRoutes.openapi(retrievePlayerByAddress, async (c) => {
   const { playersService } = extractMiddleware(c);
-  const { id } = c.req.valid("param");
+  const { address } = c.req.valid("param");
 
-  const player = await playersService.retrievePlayer({
-    id,
+  const player = await playersService.getPlayerByAddress({
+    address,
   });
 
   return c.json(player, 200);
 });
 
-playerRoutes.openapi(createPlayerRoute, async (c) => {
+playerRoutes.openapi(connectPlayerRoute, async (c) => {
   const { playersService } = extractMiddleware(c);
   const { address } = c.req.valid("json");
 
-  const player = await playersService.createPlayer({
+  const player = await playersService.getOrCreatePlayerByAddress({
     address,
   });
 
@@ -174,7 +174,7 @@ playerRoutes.openapi(verifyWorldIdPlayerRoute, async (c) => {
   const { authorization } = c.req.valid("header");
 
   const data = await playersService.verifyWorldIdPlayer({
-    jwt: authorization,
+    jwt: authorization.split(" ")[1],
     worldcoinSignature: worldCoinSignature,
   });
 
