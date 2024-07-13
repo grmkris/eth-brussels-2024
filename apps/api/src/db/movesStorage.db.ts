@@ -13,7 +13,11 @@ export const Moves = pgTable("moves", {
 
 export const SelectMove = createSelectSchema(Moves, {});
 
+export const SelectMovesWithAddress = createSelectSchema(Moves, {})
+.extend({playerAddress: z.string()});
+
 export const CreateMove = createInsertSchema(Moves, {}).omit({id: true, createdAt: true});
 
 export type SelectMove = z.infer<typeof SelectMove>;
+export type SelectMovesWithAddress = z.infer<typeof SelectMovesWithAddress>;
 export type CreateMove = z.infer<typeof CreateMove>;

@@ -7,13 +7,14 @@ export const gamePlayerRepository = (config: {
 }) => {
     const { db } = config;
 
-    const create = async (props:
+    const tryCreate = async (props:
         CreateGamePlayer
     ): Promise<SelectGamePlayer> => {
         const createdGamePlayer = await db
             .insert(GamePlayers)
             .values(props)
             .returning()
+            .onConflictDoNothing()
             .execute();
 
         if (createdGamePlayer.length < 1) {
@@ -24,7 +25,7 @@ export const gamePlayerRepository = (config: {
     };
 
     return {
-        create,
+        tryCreate,
     }
 };
 
