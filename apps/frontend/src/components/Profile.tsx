@@ -3,23 +3,25 @@ import { useAccount } from "wagmi";
 import { WorldID } from "./worlid";
 import { useConnectPlayer } from "@/hooks/player/useConnectPlayer";
 import { useGetPlayer } from "@/hooks/player/useGetPlayer";
+import { PlayersOutput } from "@/schemas/playerSchemas";
 
 export function ConnectWallet() {
   return <Profile />;
 }
 
 const Profile = () => {
+  const playerInfo = useGetPlayer();
   return (
     <div className="flex flex-col gap-4">
       <DynamicWidget />
-      <SignInWithWallet />
+      <SignInWithWallet player={playerInfo.data} />
       <WorldID />
       <PlayerInfo />
     </div>
   );
 };
 
-export const SignInWithWallet = () => {
+export const SignInWithWallet = (props: { player?: PlayersOutput }) => {
   const connectPlayer = useConnectPlayer();
   const account = useAccount();
 
