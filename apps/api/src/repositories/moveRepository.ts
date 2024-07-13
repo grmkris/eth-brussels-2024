@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db } from "../db/db";
-import { CreateMove, Moves, SelectMove } from "../db/movesStorage.db";
+import { CreateMove, Moves, SelectMove, SelectMovesWithAddress } from "../db/movesStorage.db";
 import { Players } from "../db/playersStorage.db";
 import { GamePlayers } from "../db/gamePlayersStorage.db";
 
@@ -23,7 +23,7 @@ export const moveRepository = (config: {
 
     const findManyByGameId = async (props: {
         gameId: string;
-    }): Promise<SelectMove[]> => {
+    }): Promise<SelectMovesWithAddress[]> => {
         const moves = await db
             .select({
                 id: Moves.id,
@@ -31,6 +31,7 @@ export const moveRepository = (config: {
                 xCoordinate: Moves.xCoordinate,
                 yCoordinate: Moves.yCoordinate,
                 createdAt: Moves.createdAt,
+                playerAddress: Players.address,
             })
             .from(Moves)
             .innerJoin(

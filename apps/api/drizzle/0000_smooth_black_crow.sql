@@ -25,7 +25,8 @@ CREATE TABLE IF NOT EXISTS "game_players" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"game_id" uuid NOT NULL,
 	"player_id" uuid NOT NULL,
-	"joined_at" timestamp DEFAULT now() NOT NULL
+	"joined_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "game_players_game_id_player_id_unique" UNIQUE("game_id","player_id")
 );
 --> statement-breakpoint
 DO $$ BEGIN

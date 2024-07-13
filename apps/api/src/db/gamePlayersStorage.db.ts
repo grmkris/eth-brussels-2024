@@ -1,4 +1,4 @@
-import { pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
+import { pgTable, timestamp, uuid, unique } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { Games } from "./gamesStorage.db";
 import { Players } from "./playersStorage.db";
@@ -10,7 +10,11 @@ export const GamePlayers = pgTable("game_players", {
     gameId: uuid("game_id").notNull().references(() => Games.id),
     playerId: uuid("player_id").notNull().references(() => Players.id),
     joinedAt: timestamp("joined_at").defaultNow().notNull(),
-});
+},
+    (table) => ({
+        unq: unique().on(table.gameId, table.playerId),	
+    }),
+);
 
 export const SelectGamePlayer = createSelectSchema(GamePlayers, {});
 
