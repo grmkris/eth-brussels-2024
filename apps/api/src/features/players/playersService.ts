@@ -164,9 +164,7 @@ export const playersService = (deps: {
     const recipientAmount = parseEther("2");
     const feeAmount = parseEther("0.2");
     const chainId = BigInt(publicClient.chain.id);
-    const refundDestination = mnemonicToAccount(
-      env.DB_OPERATOR_MNEMONIC,
-    ).address;
+    const refundDestination = props.senderAddress as Address;
 
     const intentHash = keccak256(
       // backend
@@ -187,8 +185,8 @@ export const playersService = (deps: {
         [
           recipientAmount,
           deadline,
-          mnemonicToAccount(env.DB_OPERATOR_MNEMONIC).address, // Recipient
-          "0x193C77Ad6191b935D8AcbB4fE2f7f4345545acd5",
+          "0x4006c2d3123FD2e243742d8aBEE8B7667c5a2C3A", // VAULT
+          "0x34182d56d905a195524a8F1813180C134687ca34", // CURRENCY - NOUNS TOKENS
           refundDestination,
           feeAmount,
           id,

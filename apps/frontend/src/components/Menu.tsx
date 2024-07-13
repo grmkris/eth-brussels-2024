@@ -1,6 +1,7 @@
 import { ConnectWallet } from "@/components/Profile";
 import { useCreateGame } from "@/hooks/games/useCreateGame";
 import { useGetGames } from "@/hooks/games/useGetGames";
+import { WalletOptions } from "@/components/WalletOptions";
 
 export const Menu = (props: {
   sidebarOpen?: boolean;
@@ -20,6 +21,7 @@ export const Menu = (props: {
         <h1 className="text-2xl font-semibold">Sidebar</h1>
         <ul className="p-4 flex flex-col gap-4">
           <ConnectWallet />
+          <WalletOptions />
           <button
             disabled={
               !getGames.data?.[getGames.data.length - 1]?.winnerId &&

@@ -3,20 +3,13 @@ import { Connector, useConnect } from "wagmi";
 import { usePlayPosition } from "../hooks/actions/usePlayPosition";
 
 export function WalletOptions() {
-  const { connectors, connect } = useConnect();
   const transfer = usePlayPosition();
-
-  if (!connectors.length) return <div>No connectors available</div>;
   return (
     <>
-      {connectors.map((connector) => (
-        <WalletOption
-          key={connector.uid}
-          connector={connector}
-          onClick={() => connect({ connector })}
-        />
-      ))}
       <button
+        className={
+          "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        }
         onClick={() => {
           transfer.mutate({ position: "test" });
         }}

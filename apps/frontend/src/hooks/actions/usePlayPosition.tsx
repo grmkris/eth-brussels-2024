@@ -2,22 +2,18 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/apiClient";
 import {
   useAccount,
-  useChainId,
   usePublicClient,
+  useReadContract,
   useWalletClient,
+  useWriteContract,
 } from "wagmi";
-import { TransferAbi } from "../../abi/transfer.abi";
-import {
-  Address,
-  encodePacked,
-  keccak256,
-  parseEther,
-  zeroAddress,
-} from "viem";
+import { Erc20Abi, TransferAbi } from "@/abi/transfer.abi";
+import { Address, encodePacked, keccak256, parseEther } from "viem";
 import { sepolia } from "viem/chains";
 
-const TRANSFER_CONTRACT_ADDRESS = "0xb0CAC7DAF0D76569913e670D942dB4359E6E4E61"; // sepolia
+const TRANSFER_CONTRACT_ADDRESS = "0xb90d5c07BF97883821767c31aFc9dd4adfc0BF0C"; // sepolia
 const OPERATOR_CONTRACT_ADDRESS = "0x29739a454FDe98454690427e960518b15029599C"; // sepolia
+const NOUNS_ERC20_TOKEN = "0x34182d56d905a195524a8F1813180C134687ca34";
 
 export const usePlayPosition = (props?: {
   onSuccess?: () => void;
@@ -27,6 +23,14 @@ export const usePlayPosition = (props?: {
   const publicClient = usePublicClient();
   const { data: walletClient } = useWalletClient();
   const account = useAccount();
+  const allowance = useReadContract({
+    account: account.address,
+    abi: Erc20Abi,
+    functionName: "allowance",
+    address: NOUNS_ERC20_TOKEN,
+  });
+
+  const increaseAllowance = useWriteContract();
 
   return useMutation({
     mutationFn: async (variables: { position: string }) => {
@@ -34,6 +38,20 @@ export const usePlayPosition = (props?: {
       if (!variables.position) throw new Error("No position description");
       if (!walletClient) throw new Error("No wallet client");
       if (!publicClient) throw new Error("No public client");
+
+      if (allowance.data && allowance.data < parseEther("2")) {
+        const txHash = await increaseAllowance.writeContractAsync({
+          account: account.address,
+          abi: Erc20Abi,
+          functionName: "approve",
+          address: NOUNS_ERC20_TOKEN,
+          args: [
+            TRANSFER_CONTRACT_ADDRESS.toLocaleLowerCase() as Address,
+            parseEther("10"),
+          ],
+        });
+        console.log("Allowance increased", txHash); // TODO ADD notification here that points to blockexplorer sponsor
+      }
 
       const result = await apiClient["/players/payment-signature"].post({
         json: {
@@ -74,6 +92,8 @@ export const usePlayPosition = (props?: {
           },
         ],
       });
+
+      // check allowance for the token
 
       const res = await publicClient.simulateContract({
         chain: sepolia,
