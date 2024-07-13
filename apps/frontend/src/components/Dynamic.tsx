@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
 import { sepolia } from "wagmi/chains";
+import { ZeroDevSmartWalletConnectors } from "@dynamic-labs/ethereum-aa";
 
 const wagmiConfig = createConfig({
   chains: [sepolia],
@@ -22,7 +23,10 @@ export default function Dynamic(props: { children: React.ReactNode }) {
       settings={{
         // Find your environment id at https://app.dynamic.xyz/dashboard/developer
         environmentId: "dc1513f0-e447-4240-b99b-683a1bf86f62",
-        walletConnectors: [EthereumWalletConnectors],
+        walletConnectors: [
+          ZeroDevSmartWalletConnectors,
+          EthereumWalletConnectors,
+        ],
       }}
     >
       <WagmiProvider config={wagmiConfig}>

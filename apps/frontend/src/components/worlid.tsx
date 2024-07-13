@@ -1,8 +1,9 @@
 import { VerificationLevel, IDKitWidget } from "@worldcoin/idkit";
 import type { ISuccessResult } from "@worldcoin/idkit";
 import { useConnectWorldCoinPlayer } from "@/hooks/player/useConnectPlayer";
+import { PlayersOutput } from "@/schemas/playerSchemas";
 
-export const WorldID = () => {
+export const WorldID = (props: { player?: PlayersOutput }) => {
   if (!process.env.NEXT_PUBLIC_WLD_APP_ID) {
     throw new Error("app_id is not set in environment variables!");
   }
@@ -38,20 +39,25 @@ export const WorldID = () => {
   };
 
   return (
-    <div>
-      <IDKitWidget
-        action={process.env.NEXT_PUBLIC_WLD_ACTION!}
-        app_id={process.env.NEXT_PUBLIC_WLD_APP_ID as `app_${string}`}
-        onSuccess={onSuccess}
-        handleVerify={handleProof}
-        verification_level={VerificationLevel.Orb} // Change this to VerificationLevel.Device to accept Orb- and Device-verified users
-      >
-        {({ open }) => (
-          <button className="border border-black rounded-md" onClick={open}>
-            <div className="mx-3 my-1">Verify with World ID</div>
-          </button>
-        )}
-      </IDKitWidget>
+    <div className="w-full">
+      {!props.player?.worldcoinVerified && (
+        <IDKitWidget
+          action={process.env.NEXT_PUBLIC_WLD_ACTION!}
+          app_id={process.env.NEXT_PUBLIC_WLD_APP_ID as `app_${string}`}
+          onSuccess={onSuccess}
+          handleVerify={handleProof}
+          verification_level={VerificationLevel.Orb} // Change this to VerificationLevel.Device to accept Orb- and Device-verified users
+        >
+          {({ open }) => (
+            <button
+              className="border border-black rounded-md w-full hover:opacity-60 h-10"
+              onClick={open}
+            >
+              <div className="mx-3 my-1">Verify with World ID</div>
+            </button>
+          )}
+        </IDKitWidget>
+      )}
     </div>
   );
 };
