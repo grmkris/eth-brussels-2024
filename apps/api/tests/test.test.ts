@@ -15,7 +15,7 @@ describe("listGamesRoute", () => {
     app = application.app;
   });
 
-  it("should create a player", async () => {
+  it.skip("should create a player", async () => {
     const path = createPath(connectPlayerRoute.path, {})
 
     const res = await app.request(path, {
@@ -31,17 +31,17 @@ describe("listGamesRoute", () => {
     expect(res.status).toBe(201);
   });
 
-  it.only("should create a move", async () => {
+  it.skip("should create a move", async () => {
     const path = createPath(createMoveRoute.path, {
-        gameId: "5de28b95-5b82-4605-b71e-ac39d69944b6",
+        gameId: "da06b8e4-fe96-47b4-b6ba-89b8dcb0f85d",
         playerId: "cdb2c9ab-7bbe-478c-9575-92d55f2ee604",
     });
 
     const res = await app.request(path, {
         method: "POST",
         body: JSON.stringify({
-            xCoordinate: 1,
-            yCoordinate: 1,
+            xCoordinate: 5,
+            yCoordinate: 5,
         }),
         headers: new Headers({ 'Content-Type': 'application/json' }),
     });
@@ -50,9 +50,9 @@ describe("listGamesRoute", () => {
     expect(res.status).toBe(201);
   });
 
-  it("should retrieve a game", async () => {
+  it.only("should retrieve a game", async () => {
     const path = createPath(retrieveGameRoute.path, {
-        id: "ec9b4731-47a5-4dbf-9a44-5ed45a43063a",
+        id: "da06b8e4-fe96-47b4-b6ba-89b8dcb0f85d",
     });
 
     const res = await app.request(path, {
@@ -64,10 +64,10 @@ describe("listGamesRoute", () => {
     expect(res.status).toBe(200);
     const responseBody = (await res.json()) as GameResponse;
 
-    console.log(responseBody);
+    console.log(responseBody.map[5][4]);
   });
 
-  it("should return a list of games", async () => {
+  it.skip("should return a list of games", async () => {
     const res = await app.request("/games", {
         method: "GET",
     })
@@ -78,7 +78,7 @@ describe("listGamesRoute", () => {
     console.log(responseBody);
   });
 
-  it("should create a game", async () => {
+  it.skip("should create a game", async () => {
     const res = await app.request("/games", {
         method: "POST",
     })
