@@ -106,14 +106,13 @@ export const usePlayPosition = (props?: {
             id: id as Address,
             deadline: BigInt(deadline),
             signature: signature as Address,
-            refundDestination:
-              OPERATOR_CONTRACT_ADDRESS.toLocaleLowerCase() as Address,
-            recipientCurrency: "0x193C77Ad6191b935D8AcbB4fE2f7f4345545acd5",
+            refundDestination: account.address.toLocaleLowerCase() as Address,
+            recipientCurrency: NOUNS_ERC20_TOKEN,
             prefix: "0x",
             recipientAmount: parseEther("2"),
             feeAmount: parseEther("0.2"),
             operator: OPERATOR_CONTRACT_ADDRESS.toLocaleLowerCase() as Address,
-            recipient: OPERATOR_CONTRACT_ADDRESS.toLocaleLowerCase() as Address,
+            recipient: "0x4006c2d3123FD2e243742d8aBEE8B7667c5a2C3A",
           },
         ],
       });
