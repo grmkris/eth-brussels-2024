@@ -10,7 +10,7 @@ export const GameArea = ({
 }) => {
   const [gridSize, setGridSize] = useState(initialGridSize);
   const [zoomLevel, setZoomLevel] = useState(initialZoomLevel);
-  const [panning, setPanning] = useState(false); // State to track panning mode
+  const [panning, setPanning] = useState(false);
   const [panStart, setPanStart] = useState<{ x: number; y: number } | null>(
     null,
   );
@@ -21,7 +21,7 @@ export const GameArea = ({
   useEffect(() => {
     const handleMouseDown = (event: MouseEvent) => {
       if ((event.metaKey || event.ctrlKey) && !panning) {
-        event.preventDefault(); // Prevent default behavior
+        event.preventDefault();
         setPanning(true);
         setPanStart({ x: event.clientX, y: event.clientY });
       }
@@ -59,22 +59,53 @@ export const GameArea = ({
     };
   }, [panning, panStart]);
 
-  const handleZoomChange = (deltaY: number) => {
-    const zoomChange = deltaY > 0 ? -1 : 1; // deltaY > 0 means scroll down (zoom out), deltaY < 0 means scroll up (zoom in)
-    setZoomLevel((prevZoomLevel) => Math.max(1, prevZoomLevel + zoomChange));
+  const handleZoomChange = (deltaY: number, mouseX: number, mouseY: number) => {
+    const zoomChange = deltaY > 0 ? -1 : 1;
+    setZoomLevel((prevZoomLevel) => {
+      const newZoomLevel = Math.max(1, prevZoomLevel + zoomChange);
+
+      if (gameAreaRef.current) {
+        const rect = gameAreaRef.current.getBoundingClientRect();
+        const offsetX = mouseX - rect.left;
+        const offsetY = mouseY - rect.top;
+
+        const prevDynamicSize = Math.max(
+          minSquareSize,
+          initialSize / prevZoomLevel,
+        );
+        const newDynamicSize = Math.max(
+          minSquareSize,
+          initialSize / newZoomLevel,
+        );
+
+        const scrollLeft =
+          gameAreaRef.current.scrollLeft +
+          (offsetX * (newDynamicSize - prevDynamicSize)) / newDynamicSize;
+        const scrollTop =
+          gameAreaRef.current.scrollTop +
+          (offsetY * (newDynamicSize - prevDynamicSize)) / newDynamicSize;
+
+        gameAreaRef.current.scrollLeft = scrollLeft;
+        gameAreaRef.current.scrollTop = scrollTop;
+      }
+
+      return newZoomLevel;
+    });
   };
 
   const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
     if (event.metaKey || event.ctrlKey) {
-      handleZoomChange(event.deltaY);
+      handleZoomChange(event.deltaY, event.clientX, event.clientY);
     }
   };
+
   const dynamicSize = Math.max(minSquareSize, initialSize / zoomLevel);
 
   return (
     <div
       ref={gameAreaRef}
       onWheel={handleWheel}
+      className="scrollable-sm"
       style={{
         overflow: "auto",
         height: "100vh",

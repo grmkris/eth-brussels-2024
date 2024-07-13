@@ -27,7 +27,12 @@ const config: HardhatUserConfig = {
     requiredConfirmations: 6,
   },
   networks: {
-    hardhat: {},
+    hardhat: {
+      forking: {
+        url: ENV.SEPOLIA_URL,
+        blockNumber: 6302184,
+      },
+    },
     sepolia: {
       url: ENV.SEPOLIA_URL,
       accounts: {
@@ -36,7 +41,7 @@ const config: HardhatUserConfig = {
     },
   },
   mocha: {
-    timeout: 100000,
+    timeout: 1000000,
   },
 };
 
@@ -58,20 +63,9 @@ task(
 
     const operator = mnemonicToAccount(ENV.OPERATOR_MNEMONIC);
 
-    const operatorClient = createWalletClient({
-      account: operator,
-      transport: http(
-        deployerClient.chain.rpcUrls.default.http as unknown as string,
-      ),
-    });
-
     const feeRecipient = mnemonicToAccount(ENV.FEE_MNEMONIC);
-    const feeOperator = createWalletClient({
-      account: feeRecipient,
-      transport: http(
-        deployerClient.chain.rpcUrls.default.http as unknown as string,
-      ),
-    });
+
+    const senderRecipient = mnemonicToAccount(ENV.SENDER_MNEMONIC);
 
     const operatorBalance = await deployerClient.getBalance({
       address: operator.address,
@@ -87,6 +81,16 @@ task(
     console.log(
       `Fee recipient ${feeRecipient.address}: ${formatEther(
         feeRecipientBalance,
+      )} ETH`,
+    );
+
+    const senderRecipientBalance = await deployerClient.getBalance({
+      address: senderRecipient.address,
+    });
+
+    console.log(
+      `Sender recipient ${senderRecipient.address}: ${formatEther(
+        senderRecipientBalance,
       )} ETH`,
     );
   },
