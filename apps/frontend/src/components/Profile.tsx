@@ -5,6 +5,7 @@ import {
   useConnectPlayer,
   useConnectWorldCoinPlayer,
 } from "@/hooks/player/useConnectPlayer";
+import { useGetPlayer } from "@/hooks/player/useGetPlayer";
 
 export function ConnectWallet() {
   return <Profile />;
@@ -17,6 +18,7 @@ const Profile = () => {
       <TestWorldCoin />
       <WORLD />
       <DynamicWidget />
+      <PlayerInfo />
     </div>
   );
 };
@@ -50,5 +52,20 @@ export const TestWorldCoin = () => {
     >
       TEST Connect World Coin
     </button>
+  );
+};
+
+export const PlayerInfo = () => {
+  const playerInfo = useGetPlayer();
+  if (playerInfo.isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (playerInfo.isError) {
+    return <div>Error</div>;
+  }
+  return (
+    <div className="p-4 rounded-xl w-40">
+      PlayerInfo:<pre>{JSON.stringify(playerInfo.data)}</pre>
+    </div>
   );
 };

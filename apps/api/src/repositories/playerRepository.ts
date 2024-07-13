@@ -2,6 +2,7 @@ import { db } from "../db/db";
 import { GamePlayers } from "../db/gamePlayersStorage.db";
 import { CreatePlayer, Players, SelectPlayer } from "../db/playersStorage.db";
 import { eq } from "drizzle-orm";
+import { getAddress } from "viem";
 
 export const playerRepository = (config: { db: db }) => {
   const { db } = config;
@@ -38,7 +39,7 @@ export const playerRepository = (config: { db: db }) => {
   const create = async (props: CreatePlayer): Promise<SelectPlayer> => {
     const createdPlayer = await db
       .insert(Players)
-      .values(props)
+      .values({ ...props, address: getAddress(props.address) })
       .returning()
       .execute();
 
@@ -52,11 +53,9 @@ export const playerRepository = (config: { db: db }) => {
   const findByAddress = async (props: {
     address: string;
   }): Promise<SelectPlayer | undefined> => {
-    const player = await db.query.Players.findFirst({
-      where: eq(Players.address, props.address),
+    return await db.query.Players.findFirst({
+      where: eq(Players.address, getAddress(props.address)),
     });
-
-    return player;
   };
 
   const update = async (props: {
@@ -67,7 +66,7 @@ export const playerRepository = (config: { db: db }) => {
   }) => {
     const updatedPlayer = await db
       .update(Players)
-      .set(props)
+      .set({ ...props, address: getAddress(props.address) })
       .where(eq(Players.address, props.address))
       .returning()
       .execute();
