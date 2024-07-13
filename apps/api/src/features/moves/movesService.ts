@@ -54,12 +54,6 @@ export const movesService = (deps: {
                     status: "finished",
                 },
             });
-
-            return {
-                ...createdMove,
-                winnerId: gameData.winnerId,
-                status: gameData.status,
-            }
         } else {
             gameData = {
                 id: props.gameId,
@@ -68,13 +62,13 @@ export const movesService = (deps: {
                 createdAt: new Date(),
                 updatedAt: new Date(),
             };
-
-            return {
-                ...createdMove,
-                winnerId: gameData.winnerId,
-                status: gameData.status,
-            }
         }
+
+        return {
+            ...createdMove,
+            winnerId: gameData.winnerId,
+            status: gameData.status,
+        };
     };
 
     return {
