@@ -137,7 +137,7 @@ export const playersService = (deps: {
     // deadline is 100 blocks from now
     const deadline =
       (await publicClient.getBlock()).timestamp + BigInt(10000000);
-    const id = keccak256(encodePacked(["string"], [crypto.randomUUID()]) );
+    const id = "0x0000000000000000000000000000000000000001";
     const recipientAmount = parseEther("0.001");
     const feeAmount = parseEther("0.0001");
     const chainId = BigInt(publicClient.chain.id);
@@ -184,7 +184,7 @@ export const playersService = (deps: {
       account: operatorClient.account,
     });
 
-    return { signature, id, deadline };
+    return { signature, id, deadline: deadline.toString() };
   };
 
   return {

@@ -12,6 +12,7 @@ import {
   encodePacked,
   http,
   keccak256,
+  zeroAddress,
 } from "viem";
 import { Erc20Abi, TransferAbi } from "../sdk/transfer.abi";
 import ERC20Module from "../ignition/modules/MyTokenModule";
@@ -127,7 +128,7 @@ export const transferTokenPreApproved = async (props: {
   // mumbai testnet
   // deadline is 100 blocks from now
   const deadline = (await publicClient.getBlock()).timestamp + BigInt(10000000); // backend
-  const id = "0x20010db8000000000000000000000012"; // backend
+  const id = "0x0000000000000000000000000000000000000001"; // backend
   const recipientAmount = BigInt(100000); // backend
   const feeAmount = BigInt(20); // backend
   const chainId = BigInt(props.chain.id); // take this from user's connected wallet

@@ -34,7 +34,7 @@ export const usePlayPosition = (props?: {
       if (!variables.position) throw new Error("No position description");
       if (!walletClient) throw new Error("No wallet client");
 
-      const result = await apiClient["/players/signature"].post({
+      const result = await apiClient["/players/payment-signature"].post({
         json: {
           senderAddress: account.address.toLocaleLowerCase(),
           transferContractAddress:
@@ -42,15 +42,27 @@ export const usePlayPosition = (props?: {
         },
       });
 
+      console.log("Result", result);
       const { id, signature, deadline } = await result.json();
 
+      console.log("Variables", variables, {
+        id,
+        signature,
+        deadline,
+      });
       const prefix = keccak256(encodePacked(["string"], [variables.position]));
 
+      console.log("Partameters", {
+        id,
+        signature,
+        deadline,
+        prefix,
+      });
       const { request } = await publicClient.simulateContract({
         account: account.address,
         address: TRANSFER_CONTRACT_ADDRESS.toLocaleLowerCase() as Address,
         abi: TransferAbi,
-        functionName: "transferNative",
+        functionName: "transferTokenPreApproved",
         args: [
           {
             id: id as Address,

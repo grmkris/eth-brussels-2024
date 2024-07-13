@@ -295,6 +295,65 @@ export default {
         }
       }
     },
+    "/players/payment-signature": {
+      "post": {
+        "operationId": "requestPaymentSignature",
+        "summary": "Request payment signature",
+        "tags": [
+          "Players"
+        ],
+        "description": "Request a signature for a player playing",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "senderAddress": {
+                    "type": "string"
+                  },
+                  "transferContractAddress": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "senderAddress",
+                  "transferContractAddress"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Requested payment signature successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "signature": {
+                      "type": "string"
+                    },
+                    "deadline": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "signature",
+                    "deadline"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/games/{id}": {
       "get": {
         "operationId": "retrieveGame",
