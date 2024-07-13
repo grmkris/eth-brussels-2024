@@ -40,21 +40,23 @@ export const usePlayPosition = (props?: {
       if (!walletClient) throw new Error("No wallet client");
       if (!publicClient) throw new Error("No public client");
 
-      const txHash0 = await increaseAllowance.writeContractAsync({
-        account: account.address,
-        abi: Erc20Abi,
-        functionName: "approve",
-        address: NOUNS_ERC20_TOKEN,
-        args: [
-          TRANSFER_CONTRACT_ADDRESS.toLocaleLowerCase() as Address,
-          parseEther("10"),
-        ],
-      });
-      await publicClient.waitForTransactionReceipt({
-        hash: txHash0,
-        confirmations: 1,
-      });
-      console.log("Allowance increased", txHash0); // TODO ADD notification here that points to blockexplorer sponsor
+      if (allowance.data && allowance.data < parseEther("2.2")) {
+        const txHash0 = await increaseAllowance.writeContractAsync({
+          account: account.address,
+          abi: Erc20Abi,
+          functionName: "approve",
+          address: NOUNS_ERC20_TOKEN,
+          args: [
+            TRANSFER_CONTRACT_ADDRESS.toLocaleLowerCase() as Address,
+            parseEther("10"),
+          ],
+        });
+        await publicClient.waitForTransactionReceipt({
+          hash: txHash0,
+          confirmations: 1,
+        });
+        console.log("Allowance increased", txHash0); // TODO ADD notification here that points to blockexplorer sponsor
+      }
 
       const result = await apiClient["/players/payment-signature"].post({
         json: {
