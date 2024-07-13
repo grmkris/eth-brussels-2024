@@ -1,6 +1,15 @@
 import { PlayerRepository } from "../../repositories/playerRepository";
 import { HTTPException } from "hono/http-exception";
-import { Address, encodePacked, getAddress, keccak256, parseEther, Signature, verifyMessage, zeroAddress } from "viem";
+import {
+  Address,
+  encodePacked,
+  getAddress,
+  keccak256,
+  parseEther,
+  Signature,
+  verifyMessage,
+  zeroAddress,
+} from "viem";
 import { sign, verify } from "hono/jwt";
 import { operatorClient, publicClient } from "../../helpers/viemConfig";
 import { mnemonicToAccount } from "viem/accounts";
@@ -49,20 +58,27 @@ export const playersService = (deps: {
       address: getAddress(props.address),
     });
     if (player) {
+      console.log("player exists");
       // if signature is verified, create new challenge and update player with new challenge
       if (player.signatureVerified) {
-        return await deps.playerRepository.update({
+        console.log("player exists with sig verified");
+        const updatedPlayer = await deps.playerRepository.update({
           address: props.address,
           challenge: crypto.randomUUID(),
         });
+        console.log(updatedPlayer);
+        return updatedPlayer;
       }
+      console.log("player exists with no sig verified");
+      return player;
     }
-    return await deps.playerRepository.create({
+    const createdPlayer = await deps.playerRepository.create({
       address: props.address,
       challenge: crypto.randomUUID(),
       signatureVerified: false,
       worldcoinVerified: false,
     });
+    return createdPlayer;
   };
 
   const verifyAndCreateJWTFromSignature = async (props: {
@@ -103,6 +119,7 @@ export const playersService = (deps: {
     worldcoinSignature: any; // TODO @daniel
   }) => {
     const decodedPayload = await verify(props.jwt, "mySecretKey");
+    console.log("decodedPayload", decodedPayload);
     const address = decodedPayload.address;
     const player = await deps.playerRepository.findByAddress({
       address: getAddress(address as string),
@@ -137,12 +154,12 @@ export const playersService = (deps: {
     // deadline is 100 blocks from now
     const deadline =
       (await publicClient.getBlock()).timestamp + BigInt(10000000);
-    const id = keccak256(encodePacked(["string"], [crypto.randomUUID()]) );
+    const id = keccak256(encodePacked(["string"], [crypto.randomUUID()]));
     const recipientAmount = parseEther("0.001");
     const feeAmount = parseEther("0.0001");
     const chainId = BigInt(publicClient.chain.id);
     const refundDestination = mnemonicToAccount(
-      env.DB_OPERATOR_MNEMONIC
+      env.DB_OPERATOR_MNEMONIC,
     ).address;
 
     const intentHash = keccak256(
@@ -173,8 +190,8 @@ export const playersService = (deps: {
           chainId,
           props.senderAddress as Address,
           props.transferContractAddress as Address,
-        ]
-      )
+        ],
+      ),
     );
 
     const signature = await operatorClient.signMessage({
@@ -193,7 +210,7 @@ export const playersService = (deps: {
     verifyAndCreateJWTFromSignature,
     verifyWorldIdPlayer,
     getPlayerByAddress,
-    requestPaymentSignature
+    requestPaymentSignature,
   };
 };
 

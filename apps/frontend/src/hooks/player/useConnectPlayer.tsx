@@ -53,11 +53,13 @@ export const useConnectWorldCoinPlayer = (props?: {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (variables: { worldCoinSignature: unknown }) => {
+      const jwtFromLocal = localStorage.getItem("token");
+      if (!jwtFromLocal) throw new Error("No JWT");
       const result = await apiClient["/players/verify-worldcoin"].post({
         // @ts-ignore
         json: { worldCoinSignature: variables.worldCoinSignature },
         headers: {
-          authorization: `Bearer ${localStorage.getItem("token")}`,
+          authorization: `Bearer ${jwtFromLocal}`,
         },
       });
 
