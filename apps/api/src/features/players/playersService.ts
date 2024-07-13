@@ -3,6 +3,13 @@ import { HTTPException } from "hono/http-exception";
 import { Address, getAddress, Signature, verifyMessage } from "viem";
 import { sign, verify } from "hono/jwt";
 
+export type VerifyReply = {
+  code: string;
+  detail: string;
+};
+
+const verifyEndpoint = `${process.env.NEXT_PUBLIC_WLD_API_BASE_URL}/api/v1/verify/${process.env.NEXT_PUBLIC_WLD_APP_ID}`;
+
 export const playersService = (deps: {
   playerRepository: PlayerRepository;
 }) => {
@@ -94,10 +101,31 @@ export const playersService = (deps: {
   }) => {
     const decodedPayload = await verify(props.jwt, "mySecretKey");
     const address = decodedPayload.address;
+    const player = await deps.playerRepository.findByAddress({
+      address: getAddress(address as string),
+    });
+    if (!player) throw new Error("Player not found");
     console.log(decodedPayload);
-    // TODO verify worldcoin and update player by their address TODO @daniel
-  };
 
+    const reqBody = props.worldcoinSignature;
+    console.log("Sending request to World ID /verify endpoint:\n", reqBody);
+    const verified = await fetch(verifyEndpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reqBody),
+    });
+    console.log("World ID response:\n", verified);
+    const parsed = (await verified.json()) as VerifyReply;
+    console.log("Parsed response:\n", parsed);
+    // TODO verify worldcoin and update player by their address TODO @daniel
+    await deps.playerRepository.update({
+      address: player.address,
+      signatureVerified: player.signatureVerified ?? false,
+      worldcoinVerified: true,
+    });
+  };
   return {
     retrievePlayer,
     getOrCreatePlayerByAddress,

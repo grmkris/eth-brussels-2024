@@ -1,10 +1,7 @@
 import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
 import { useAccount } from "wagmi";
-import WORLD from "./worlid";
-import {
-  useConnectPlayer,
-  useConnectWorldCoinPlayer,
-} from "@/hooks/player/useConnectPlayer";
+import { WorldID } from "./worlid";
+import { useConnectPlayer } from "@/hooks/player/useConnectPlayer";
 import { useGetPlayer } from "@/hooks/player/useGetPlayer";
 
 export function ConnectWallet() {
@@ -15,8 +12,7 @@ const Profile = () => {
   return (
     <div>
       <SignInWithWallet />
-      <TestWorldCoin />
-      <WORLD />
+      <WorldID />
       <DynamicWidget />
       <PlayerInfo />
     </div>
@@ -39,18 +35,6 @@ export const SignInWithWallet = () => {
       }
     >
       Connect Wallet
-    </button>
-  );
-};
-
-export const TestWorldCoin = () => {
-  const connectWorldCoin = useConnectWorldCoinPlayer();
-  return (
-    <button
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      onClick={() => connectWorldCoin.mutate()}
-    >
-      TEST Connect World Coin
     </button>
   );
 };

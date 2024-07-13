@@ -113,7 +113,7 @@ export const verifyWorldIdPlayerRoute = createRoute({
       content: {
         "application/json": {
           schema: z.object({
-            worldCoinSignature: z.any(), // TODO @daniel
+            worldCoinSignature: z.unknown(), // TODO @daniel
           }),
         },
       },
