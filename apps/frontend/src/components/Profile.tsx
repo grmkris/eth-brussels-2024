@@ -11,9 +11,9 @@ export function ConnectWallet() {
 const Profile = () => {
   return (
     <div>
+      <DynamicWidget />
       <SignInWithWallet />
       <WorldID />
-      <DynamicWidget />
       <PlayerInfo />
     </div>
   );
@@ -34,7 +34,7 @@ export const SignInWithWallet = () => {
         connectPlayer.mutate({ address: account.address as string })
       }
     >
-      Connect Wallet
+      Hello {account.address}, verify
     </button>
   );
 };
