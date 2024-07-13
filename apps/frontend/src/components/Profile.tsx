@@ -9,13 +9,13 @@ const Profile = () => {
   const signMessage = useSignMessage();
 
   return (
-    <>
+    <div className="fixed z-10 rounded-xlpt-4 p-4 w-fit">
       <button
         onClick={() => signMessage.signMessage({ message: "Hello, world!" })}
       >
         Sign message
       </button>
-      <DynamicWidget />;
-    </>
+      <DynamicWidget />
+    </div>
   );
 };

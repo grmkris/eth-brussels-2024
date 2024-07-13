@@ -28,7 +28,7 @@ export const Square = ({ id, size }: { id: number; size: number }) => {
         width: `${size}px`,
         height: `${size}px`,
       }}
-      className={`cursor-pointer relative border-2 border-black overflow-hidden transform transition-transform duration-500 ${
+      className={`cursor-pointer rounded-md relative border-2 border-black bg-gray-800 overflow-hidden transform transition-transform duration-500 ${
         animationState === "scaling" ? "scale-150" : ""
       }`}
       onClick={handleClick}
