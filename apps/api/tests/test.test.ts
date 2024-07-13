@@ -7,6 +7,8 @@ import { createPath } from "./helpers";
 import { retrieveGameRoute } from "../src/features/games/gamesRouter";
 import { connectPlayerRoute } from "../src/features/players/playersRouter";
 import { createMoveRoute } from "../src/features/moves/movesRouter";
+import { retrievePlayerByAddress } from "../src/features/players/playersRouter";
+import { PlayersResponse } from "../src/features/players/playersSchemas";
 
 describe("listGamesRoute", () => {
   let app: OpenAPIHono;
@@ -31,17 +33,36 @@ describe("listGamesRoute", () => {
     expect(res.status).toBe(201);
   });
 
-  it.skip("should create a move", async () => {
+  it.skip("should retrieve a player", async () => {
+    const path = createPath(retrievePlayerByAddress.path, {
+        address: "0x1234567890123456789012345678901234567890",
+    });
+
+    const res = await app.request(path, {
+        method: "GET",
+        headers: new Headers({ 'Content-Type': 'application/json' }),
+    });
+
+    console.log(res.body);
+
+    expect(res.status).toBe(200);
+    
+    const responseBody = (await res.json()) as PlayersResponse;
+
+    console.log(responseBody);
+  });
+
+  it.only("should create a move", async () => {
     const path = createPath(createMoveRoute.path, {
-        gameId: "da06b8e4-fe96-47b4-b6ba-89b8dcb0f85d",
+        gameId: "ac16c992-e5ff-4472-98d4-77bfc5b8a42d",
         playerId: "cdb2c9ab-7bbe-478c-9575-92d55f2ee604",
     });
 
     const res = await app.request(path, {
         method: "POST",
         body: JSON.stringify({
-            xCoordinate: 5,
-            yCoordinate: 5,
+            xCoordinate: 1,
+            yCoordinate: 3,
         }),
         headers: new Headers({ 'Content-Type': 'application/json' }),
     });
@@ -50,7 +71,7 @@ describe("listGamesRoute", () => {
     expect(res.status).toBe(201);
   });
 
-  it.only("should retrieve a game", async () => {
+  it.skip("should retrieve a game", async () => {
     const path = createPath(retrieveGameRoute.path, {
         id: "da06b8e4-fe96-47b4-b6ba-89b8dcb0f85d",
     });

@@ -71,10 +71,24 @@ export const moveRepository = (config: {
         return createdMove[0];
     };
 
+    const deleteManyByGameIdAndPlayerId = async (props: {
+        gameId: string;
+        playerId: string;
+    }) => {
+        await db
+            .delete(Moves)
+            .where(and(
+                eq(Moves.gameId, props.gameId),
+                eq(Moves.playerId, props.playerId),
+            ))
+            .execute();
+    }
+
     return {
         findManyByGameIdAndPlayerId,
         findManyByGameId,
         create,
+        deleteManyByGameIdAndPlayerId,
     }
 }
 

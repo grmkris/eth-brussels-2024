@@ -1,4 +1,6 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
+import { PlayersResponse } from "../players/playersSchemas";
+import { extractMiddleware } from "../../middlewares/middleware";
 
 const collectionPath = "/verify";
 const detailPath = collectionPath + "/{id}";
@@ -6,7 +8,7 @@ const detailPath = collectionPath + "/{id}";
 const playerRoutes = new OpenAPIHono();
 
 export const retrievePlayerRoute = createRoute({
-  method: "POST",
+  method: "post",
   path: detailPath,
   operationId: "retrievePlayer",
   summary: "Retrieve player",
@@ -74,7 +76,7 @@ playerRoutes.openapi(createPlayerRoute, async c => {
   const { playersService } = extractMiddleware(c);
   const { address } = c.req.valid("json");
 
-  const player = await playersService.createPlayer({
+  const player = await playersService.getOrCreatePlayerByAddress({
     address,
   });
 
