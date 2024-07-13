@@ -10,6 +10,7 @@ import {
 import { Erc20Abi, TransferAbi } from "@/abi/transfer.abi";
 import { Address, encodePacked, keccak256, parseEther } from "viem";
 import { sepolia } from "viem/chains";
+import { waitForTransactionReceipt } from "viem/actions";
 
 const TRANSFER_CONTRACT_ADDRESS = "0xb90d5c07BF97883821767c31aFc9dd4adfc0BF0C"; // sepolia
 const OPERATOR_CONTRACT_ADDRESS = "0x29739a454FDe98454690427e960518b15029599C"; // sepolia
@@ -49,6 +50,10 @@ export const usePlayPosition = (props?: {
           parseEther("10"),
         ],
       });
+      await publicClient.waitForTransactionReceipt({
+        hash: txHash0,
+        confirmations: 1,
+      });
       console.log("Allowance increased", txHash0); // TODO ADD notification here that points to blockexplorer sponsor
 
       const result = await apiClient["/players/payment-signature"].post({
@@ -81,7 +86,7 @@ export const usePlayPosition = (props?: {
             signature: signature as Address,
             refundDestination:
               OPERATOR_CONTRACT_ADDRESS.toLocaleLowerCase() as Address,
-            recipientCurrency: "0x193C77Ad6191b935D8AcbB4fE2f7f4345545acd5",
+            recipientCurrency: NOUNS_ERC20_TOKEN,
             prefix: "0x",
             recipientAmount: parseEther("2"),
             feeAmount: parseEther("0.2"),

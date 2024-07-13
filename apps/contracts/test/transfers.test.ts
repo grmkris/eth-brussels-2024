@@ -1,5 +1,5 @@
 import hre from "hardhat";
-
+import { TIC_TAC_TOCE_ADDRESSES } from "schemas/addresses.schema";
 import { expect } from "chai";
 import TransfersModule from "../ignition/modules/TransfersModule";
 import { mnemonicToAccount } from "viem/accounts";
@@ -13,10 +13,8 @@ import {
   http,
   keccak256,
   parseEther,
-  zeroAddress,
 } from "viem";
 import { Erc20Abi, TransferAbi } from "../sdk/transfer.abi";
-import ERC20Module from "../ignition/modules/MyTokenModule";
 import VaultModule from "../ignition/modules/VaultModule";
 
 const PERMIT2_ADDRESS = "0x000000000022D473030F116dDEE9F6B43aC78BA3";
@@ -27,7 +25,9 @@ const WRAPPED_NATIVE_CURRENCY_ADDRESS =
 const FEE_DESTINATION = mnemonicToAccount(ENV.FEE_MNEMONIC).address;
 const OPERATOR = mnemonicToAccount(ENV.OPERATOR_MNEMONIC).address;
 
-const NOUNS_ERC20_TOKEN = "0x34182d56d905a195524a8F1813180C134687ca34"
+const NOUNS_ERC20_TOKEN = "0x34182d56d905a195524a8F1813180C134687ca34";
+
+const as = TIC_TAC_TOCE_ADDRESSES.baseSepolia;
 
 describe("Transfers", function () {
   // We define a fixture to reuse the same setup in every test.
@@ -78,7 +78,7 @@ describe("Transfers", function () {
     const { vault } = await hre.ignition.deploy(VaultModule, {
       parameters: {
         VaultModule: {
-          token: NOUNS_ERC20_TOKEN
+          token: NOUNS_ERC20_TOKEN,
         },
       },
     });
@@ -105,9 +105,8 @@ describe("Transfers", function () {
         chain: a.chain,
         token: NOUNS_ERC20_TOKEN,
         transferContract: transfers.address,
-        recipientAddress: vault.address
+        recipientAddress: vault.address,
       });
-
     });
 
     it.skip("Should register operator", async function () {
@@ -156,7 +155,7 @@ export const transferTokenPreApproved = async (props: {
   const prefix = "0x";
   const totalAmount = recipientAmount + feeAmount;
 
-  console.log("Allowing token")
+  console.log("Allowing token");
 
   // check allowance and approve if necessary
   const allowance = await publicClient.readContract({

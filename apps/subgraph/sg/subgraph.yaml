@@ -8,7 +8,7 @@ dataSources:
     name: Transfers
     network: sepolia
     source:
-      address: "0xb0CAC7DAF0D76569913e670D942dB4359E6E4E61"
+      address: "0xb90d5c07BF97883821767c31aFc9dd4adfc0BF0C"
       abi: Transfers
       startBlock: 6302180
     mapping:
