@@ -2,11 +2,12 @@ import { HardhatUserConfig, task } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox-viem";
 import "@nomicfoundation/hardhat-ignition-viem";
 import "@nomicfoundation/hardhat-viem";
-import { createWalletClient, formatEther, http } from "viem";
+import { formatEther } from "viem";
 import { ENV } from "./env";
-import { deriveKeyFromMnemonicAndPath } from "hardhat/internal/util/keys-derivation";
 import { mnemonicToAccount } from "viem/accounts";
-import env from "hardhat";
+import { Erc20Abi } from "./sdk/transfer.abi";
+
+const NOUNS_ERC20_TOKEN = "0x34182d56d905a195524a8F1813180C134687ca34"
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -58,7 +59,14 @@ task(
       const balance = await deployerClient.getBalance({
         address: account.account.address,
       });
-      console.log(`${account.account.address}: ${formatEther(balance)} ETH`);
+      const balanceof = await deployerClient.readContract({
+        address: NOUNS_ERC20_TOKEN,
+        abi: Erc20Abi,
+        functionName: "balanceOf",
+        args: [account.account.address],
+      })
+
+      console.log(`${account.account.address}: ${formatEther(balance)} ETH, ${formatEther(balanceof)} NOUNS`);
     }
 
     const operator = mnemonicToAccount(ENV.OPERATOR_MNEMONIC);

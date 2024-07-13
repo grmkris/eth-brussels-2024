@@ -2,13 +2,13 @@ import { PlayerRepository } from "../../repositories/playerRepository";
 import { HTTPException } from "hono/http-exception";
 import {
   Address,
+  bytesToHex,
   encodePacked,
   getAddress,
   keccak256,
   parseEther,
   Signature,
   verifyMessage,
-  zeroAddress,
 } from "viem";
 import { sign, verify } from "hono/jwt";
 import { operatorClient, publicClient } from "../../helpers/viemConfig";
@@ -154,9 +154,15 @@ export const playersService = (deps: {
     // deadline is 100 blocks from now
     const deadline =
       (await publicClient.getBlock()).timestamp + BigInt(10000000);
-    const id = keccak256(encodePacked(["string"], [crypto.randomUUID()]));
-    const recipientAmount = parseEther("0.001");
-    const feeAmount = parseEther("0.0001");
+    // Generate 16 random bytes
+    const randomBytes = crypto.getRandomValues(new Uint8Array(16));
+
+    // Convert to hexadecimal string (optional)
+    const randomHexValue = bytesToHex(randomBytes);
+
+    const id = randomHexValue;
+    const recipientAmount = parseEther("2");
+    const feeAmount = parseEther("0.2");
     const chainId = BigInt(publicClient.chain.id);
     const refundDestination = mnemonicToAccount(
       env.DB_OPERATOR_MNEMONIC,
@@ -172,7 +178,7 @@ export const playersService = (deps: {
           "address",
           "address",
           "uint256",
-          "address",
+          "bytes16",
           "address",
           "uint256",
           "address",
@@ -182,7 +188,7 @@ export const playersService = (deps: {
           recipientAmount,
           deadline,
           mnemonicToAccount(env.DB_OPERATOR_MNEMONIC).address, // Recipient
-          zeroAddress,
+          "0x193C77Ad6191b935D8AcbB4fE2f7f4345545acd5",
           refundDestination,
           feeAmount,
           id,
@@ -201,7 +207,7 @@ export const playersService = (deps: {
       account: operatorClient.account,
     });
 
-    return { signature, id, deadline };
+    return { signature, id, deadline: deadline.toString() };
   };
 
   return {

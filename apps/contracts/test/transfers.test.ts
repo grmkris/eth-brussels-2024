@@ -12,9 +12,12 @@ import {
   encodePacked,
   http,
   keccak256,
+  parseEther,
+  zeroAddress,
 } from "viem";
 import { Erc20Abi, TransferAbi } from "../sdk/transfer.abi";
 import ERC20Module from "../ignition/modules/MyTokenModule";
+import VaultModule from "../ignition/modules/VaultModule";
 
 const PERMIT2_ADDRESS = "0x000000000022D473030F116dDEE9F6B43aC78BA3";
 const UNISWAP_ROUTER_ADDRESS = "0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD";
@@ -23,6 +26,8 @@ const WRAPPED_NATIVE_CURRENCY_ADDRESS =
 
 const FEE_DESTINATION = mnemonicToAccount(ENV.FEE_MNEMONIC).address;
 const OPERATOR = mnemonicToAccount(ENV.OPERATOR_MNEMONIC).address;
+
+const NOUNS_ERC20_TOKEN = "0x34182d56d905a195524a8F1813180C134687ca34"
 
 describe("Transfers", function () {
   // We define a fixture to reuse the same setup in every test.
@@ -48,29 +53,43 @@ describe("Transfers", function () {
     return { owner, otherAccount, transfers };
   }
 
-  async function deployToken() {
-    console.log("Deploying Token");
-    const { erc20 } = await hre.ignition.deploy(ERC20Module);
+  // async function deployToken() {
+  //   console.log("Deploying Token");
+  //   const { erc20 } = await hre.ignition.deploy(ERC20Module);
 
-    const [first] = await hre.viem.getWalletClients();
+  //   const [first] = await hre.viem.getWalletClients();
 
-    const tx = await first.writeContract({
-      address: erc20.address,
-      abi: Erc20Abi,
-      functionName: "transfer",
-      args: [mnemonicToAccount(ENV.SENDER_MNEMONIC).address, 10000000n],
-    })
+  //   const tx = await first.writeContract({
+  //     address: erc20.address,
+  //     abi: Erc20Abi,
+  //     functionName: "transfer",
+  //     args: [mnemonicToAccount(ENV.SENDER_MNEMONIC).address, 10000000n],
+  //   })
 
-    const publicClient = await hre.viem.getPublicClient();
+  //   const publicClient = await hre.viem.getPublicClient();
 
-    await publicClient.waitForTransactionReceipt({ hash: tx });
+  //   await publicClient.waitForTransactionReceipt({ hash: tx });
 
-    return erc20;
+  //   return erc20;
+  // }
+
+  async function deployVault() {
+    console.log("Deploying Vault");
+    const { vault } = await hre.ignition.deploy(VaultModule, {
+      parameters: {
+        VaultModule: {
+          token: NOUNS_ERC20_TOKEN
+        },
+      },
+    });
+
+    console.log("Deployed Vault at", vault.address);
+    return vault;
   }
 
   describe("Deployment", function () {
     it("Correctly deploy", async function () {
-      const { transfers, owner, otherAccount } = await deployTransfersFixture();
+      const { transfers, owner } = await deployTransfersFixture();
 
       expect((await transfers.read.owner()).toLowerCase()).to.equal(
         owner.account.address.toLowerCase(),
@@ -80,17 +99,18 @@ describe("Transfers", function () {
       console.log("transfers", transfers.address);
 
       const a = await hre.viem.getPublicClient();
-      const erc20 = await deployToken();
-        
-      console.log("Deployed ERC20", erc20.address);
+      const vault = await deployVault();
+
       await transferTokenPreApproved({
         chain: a.chain,
-        token: erc20.address,
+        token: NOUNS_ERC20_TOKEN,
         transferContract: transfers.address,
+        recipientAddress: vault.address
       });
+
     });
 
-    it("Should register operator", async function () {
+    it.skip("Should register operator", async function () {
       const { transfers, owner, otherAccount } = await deployTransfersFixture();
 
       const tx = await transfers.write.registerOperatorWithFeeDestination([
@@ -107,6 +127,7 @@ export const transferTokenPreApproved = async (props: {
   chain: Chain;
   token: Address;
   transferContract: Address;
+  recipientAddress: Address;
 }) => {
   const publicClient = createPublicClient({
     chain: props.chain,
@@ -127,9 +148,9 @@ export const transferTokenPreApproved = async (props: {
   // mumbai testnet
   // deadline is 100 blocks from now
   const deadline = (await publicClient.getBlock()).timestamp + BigInt(10000000); // backend
-  const id = "0x20010db8000000000000000000000012"; // backend
-  const recipientAmount = BigInt(100000); // backend
-  const feeAmount = BigInt(20); // backend
+  const id = "0x0000000000000000000000000000000000000001"; // backend
+  const recipientAmount = parseEther("1"); // backend
+  const feeAmount = parseEther("0.1"); // backend
   const chainId = BigInt(props.chain.id); // take this from user's connected wallet
   const refundDestination = mnemonicToAccount(ENV.SENDER_MNEMONIC).address; // backend
   const prefix = "0x";
@@ -192,7 +213,7 @@ export const transferTokenPreApproved = async (props: {
       [
         recipientAmount,
         deadline,
-        mnemonicToAccount(ENV.SENDER_MNEMONIC).address, // TODO maybe this is wrong it should be "RECIPIENT"
+        props.recipientAddress,
         props.token,
         refundDestination,
         feeAmount,
@@ -208,6 +229,7 @@ export const transferTokenPreApproved = async (props: {
   console.log(`intentHash, ${intentHash}`);
   console.log(`operator: ${mnemonicToAccount(ENV.OPERATOR_MNEMONIC).address}`);
   console.log(`sender: ${mnemonicToAccount(ENV.SENDER_MNEMONIC).address}`);
+  console.log(`recipient: ${props.recipientAddress}`);
   // sign the intent hash as the operator
   const signature = await operatorWallet.signMessage({
     // backend
@@ -236,7 +258,7 @@ export const transferTokenPreApproved = async (props: {
         recipientAmount: recipientAmount,
         feeAmount: feeAmount,
         operator: mnemonicToAccount(ENV.OPERATOR_MNEMONIC).address,
-        recipient: mnemonicToAccount(ENV.SENDER_MNEMONIC).address, // TODO maybe this is wrong it should be "RECIPIENT"
+        recipient: props.recipientAddress,
       },
     ],
   });

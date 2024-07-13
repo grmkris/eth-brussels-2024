@@ -2,6 +2,7 @@
 pragma solidity ^0.8.24;
 
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract Vault {
   using SafeERC20 for IERC20;
@@ -13,25 +14,24 @@ contract Vault {
   mapping(address => uint256) public balanceOf;
 
   modifier onlyAdmin() {
-    if (msg.sender != _owner) {
-      revert notAdmin();
-    }
+    if(msg.sender != _owner) { revert notAdmin(); }
+    _;
   }
   constructor(address _token) {
     token = IERC20(_token);
     _owner = msg.sender;
   }
 
-  function setBalance(address user, uint256 balance) onlyAdmin {
+  function setBalance(address user, uint256 balance) public onlyAdmin {
     balanceOf[user] = balance;
   }
 
-  function setBalances(address[] users, uint256[] balances) onlyAdmin {
+  function setBalances(address[] memory users, uint256[] memory balances) public onlyAdmin {
     if (users.length != balances.length) {
       revert lengthMismatch();
     }
     for (uint i = 0; i < users.length; i++) {
-      balanceOf[user[i]] = balance[i];
+      balanceOf[users[i]] = balances[i];
     }
   }
 
@@ -41,7 +41,7 @@ contract Vault {
     IERC20(token).safeTransferFrom(address(this), msg.sender, _amount);
   }
 
-  function transferOwnership(address newOwner) onlyAdmin {
+  function transferOwnership(address newOwner) public onlyAdmin {
     _owner = newOwner;
   }
 }
