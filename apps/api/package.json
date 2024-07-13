@@ -11,7 +11,8 @@
     "db:studio": "pnpm drizzle-kit studio --port 3100",
     "db:stop": "docker compose -f postgres.yml down",
     "db:clean": "bun run scripts/clean-db.ts",
-    "generate:openapi": "bun run openapi.ts"
+    "generate:openapi": "bun run openapi.ts",
+    "test": "TZ=UTC bun test"
   },
   "keywords": [],
   "author": "",

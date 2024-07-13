@@ -765,7 +765,7 @@ contract Transfers is Context, Ownable, Pausable, ReentrancyGuard, Sweepable, IT
         address sender
     ) internal {
         processedTransferIntents[_intent.operator][_intent.id] = true;
-        emit Transferred(_intent.operator, _intent.id, _intent.recipient, sender, spentAmount, spentCurrency);
+        emit Transferred(_intent, sender, spentAmount, spentCurrency);
     }
 
     function sendNative(

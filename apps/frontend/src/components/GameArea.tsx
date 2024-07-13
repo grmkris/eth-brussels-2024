@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Square } from "@/components/Square";
+import { useGetPlayer } from "@/hooks/player/useGetPlayer";
 
 export const GameArea = ({
   initialGridSize,
@@ -17,6 +18,7 @@ export const GameArea = ({
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const initialSize = 400;
   const minSquareSize = 50;
+  const player = useGetPlayer();
 
   useEffect(() => {
     const handleMouseDown = (event: MouseEvent) => {
@@ -119,9 +121,20 @@ export const GameArea = ({
           gridTemplateColumns: `repeat(${gridSize}, ${dynamicSize}px)`,
         }}
       >
-        {Array.from({ length: gridSize * gridSize }).map((_, i) => (
-          <Square key={i} id={i} size={dynamicSize} />
-        ))}
+        {Array.from({ length: gridSize * gridSize }).map((_, i) => {
+          const row = Math.floor(i / gridSize);
+          const column = i % gridSize;
+          return (
+            <Square
+              player={player.data}
+              key={i}
+              id={i}
+              size={dynamicSize}
+              row={row}
+              column={column}
+            />
+          );
+        })}
       </div>
     </div>
   );

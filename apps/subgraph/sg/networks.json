@@ -1,8 +1,8 @@
 {
-  "mainnet": {
+  "sepolia": {
     "Transfers": {
-      "address": "0x658b0c7613e890EE50B8C4BC6A3f41ef411208aD",
-      "startBlock": 0
+      "address": "0xb0CAC7DAF0D76569913e670D942dB4359E6E4E61",
+      "startBlock": 6302180
     }
   }
 }

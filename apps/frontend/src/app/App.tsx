@@ -14,7 +14,7 @@ export const App = (props: { children: React.ReactNode }) => {
   };
 
   const handleClickOutside = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     if (
       sidebarOpen &&
@@ -28,7 +28,7 @@ export const App = (props: { children: React.ReactNode }) => {
     <Dynamic>
       <div className="w-fit fixed inset-0 z-10" onClick={handleClickOutside}>
         <div className="h-screen flex overflow-hidden bg-gray-200">
-          <Menu sidebarOpen={sidebarOpen} />
+          <Menu sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
           <div className="shadow w-fit fixed top-0 left-0 z-10">
             <button

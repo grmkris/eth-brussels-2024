@@ -17,18 +17,7 @@ export const retrieveGameRoute = createRoute({
     request: {
         params: z.object({
             id: z.string(),
-        }),
-        body: {
-            content: {
-                "application/json": {
-                    schema: z.object({
-                        xCoordinate: z.number(),
-                        yCoordinate: z.number(),
-                        size: z.number(),
-                    })
-                }
-            }
-        }
+        })
     },
     responses: {
         200: {
@@ -83,14 +72,8 @@ export const createGameRoute = createRoute({
 gameRoutes.openapi(retrieveGameRoute, async (c) => {
     const { gamesService } = extractMiddleware(c);
     const { id } = c.req.valid("param");
-    const { xCoordinate, yCoordinate, size } = c.req.valid("json");
 
-    const game = await gamesService.retrieveGame({
-        id,
-        xCoordinate,
-        yCoordinate,
-        size,
-    });
+    const game = await gamesService.retrieveGame({id});
 
     return c.json(game, 200);
 });

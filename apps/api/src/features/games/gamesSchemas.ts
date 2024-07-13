@@ -9,6 +9,8 @@ export const GameResponse = SelectGame.extend({
     map: playerAddressSchema,
 });
 
+export type GameResponse = z.infer<typeof GameResponse>;
+
 export const GamesResponse = z.object({
   id: z.string(),
   status: GameStatus,
@@ -16,3 +18,5 @@ export const GamesResponse = z.object({
   createdAt: z.string().date(),
   updatedAt: z.string().date(),
 });
+
+export type GamesResponse = z.infer<typeof GamesResponse>;

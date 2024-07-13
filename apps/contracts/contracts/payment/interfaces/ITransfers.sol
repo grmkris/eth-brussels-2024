@@ -44,16 +44,12 @@ struct EIP2612SignatureTransferData {
 // @notice Functions for making checked transfers between accounts
 interface ITransfers {
     // @notice Emitted when a transfer is completed
-    // @param operator The operator for the transfer intent
-    // @param id The ID of the transfer intent
-    // @param recipient Who recieved the funds.
+    // @param intent Parameters of the transfer
     // @param sender Who sent the funds.
     // @param spentAmount How much the payer sent
     // @param spentCurrency What currency the payer sent
     event Transferred(
-        address indexed operator,
-        bytes16 id,
-        address recipient,
+        TransferIntent intent,
         address sender,
         uint256 spentAmount,
         address spentCurrency

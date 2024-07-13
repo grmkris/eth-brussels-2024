@@ -372,31 +372,6 @@ export default {
             "in": "path"
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "xCoordinate": {
-                    "type": "number"
-                  },
-                  "yCoordinate": {
-                    "type": "number"
-                  },
-                  "size": {
-                    "type": "number"
-                  }
-                },
-                "required": [
-                  "xCoordinate",
-                  "yCoordinate",
-                  "size"
-                ]
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Retrieved game successfully.",
