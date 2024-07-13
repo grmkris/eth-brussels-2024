@@ -15,8 +15,7 @@ const Profile = () => {
     <div className="flex flex-col gap-4">
       <DynamicWidget />
       <SignInWithWallet player={playerInfo.data} />
-      <WorldID />
-      <PlayerInfo />
+      <WorldID player={playerInfo.data} />
     </div>
   );
 };
@@ -24,34 +23,22 @@ const Profile = () => {
 export const SignInWithWallet = (props: { player?: PlayersOutput }) => {
   const connectPlayer = useConnectPlayer();
   const account = useAccount();
-
   if (!account.address) {
-    return <>Wallet not detected</>;
+    return <div className="text-red-400 text-center">Wallet not detected</div>;
   }
 
   return (
-    <button
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      onClick={() =>
-        connectPlayer.mutate({ address: account.address as string })
-      }
-    >
-      Hello {account.address}, verify
-    </button>
-  );
-};
-
-export const PlayerInfo = () => {
-  const playerInfo = useGetPlayer();
-  if (playerInfo.isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (playerInfo.isError) {
-    return <div>Error</div>;
-  }
-  return (
-    <div className="p-4 rounded-xl w-40">
-      PlayerInfo:<pre>{JSON.stringify(playerInfo.data)}</pre>
-    </div>
+    <>
+      {!props.player?.signatureVerified && (
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md h-10"
+          onClick={() =>
+            connectPlayer.mutate({ address: account.address as string })
+          }
+        >
+          Verify: {account.address}
+        </button>
+      )}
+    </>
   );
 };
