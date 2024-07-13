@@ -9,21 +9,21 @@ export default {
     "parameters": {}
   },
   "paths": {
-    "/players/{id}": {
+    "/players/{address}": {
       "get": {
-        "operationId": "retrievePlayer",
+        "operationId": "retrievePlayerByAddress",
         "summary": "Retrieve player",
         "tags": [
           "Players"
         ],
-        "description": "Retrieve a player by ID",
+        "description": "Retrieve a player by address",
         "parameters": [
           {
             "schema": {
               "type": "string"
             },
             "required": true,
-            "name": "id",
+            "name": "address",
             "in": "path"
           }
         ],
@@ -42,6 +42,17 @@ export default {
                     "address": {
                       "type": "string"
                     },
+                    "challenge": {
+                      "type": "string"
+                    },
+                    "signatureVerified": {
+                      "type": "boolean",
+                      "nullable": true
+                    },
+                    "worldcoinVerified": {
+                      "type": "boolean",
+                      "nullable": true
+                    },
                     "lastMove": {
                       "type": "string"
                     },
@@ -52,6 +63,9 @@ export default {
                   "required": [
                     "id",
                     "address",
+                    "challenge",
+                    "signatureVerified",
+                    "worldcoinVerified",
                     "lastMove",
                     "createdAt"
                   ]
@@ -62,14 +76,14 @@ export default {
         }
       }
     },
-    "/players": {
+    "/players/connect": {
       "post": {
-        "operationId": "createPlayer",
-        "summary": "Create player",
+        "operationId": "connectPlayer",
+        "summary": "Connect player",
         "tags": [
           "Players"
         ],
-        "description": "Create a player",
+        "description": "Connect player",
         "requestBody": {
           "content": {
             "application/json": {
@@ -102,6 +116,17 @@ export default {
                     "address": {
                       "type": "string"
                     },
+                    "challenge": {
+                      "type": "string"
+                    },
+                    "signatureVerified": {
+                      "type": "boolean",
+                      "nullable": true
+                    },
+                    "worldcoinVerified": {
+                      "type": "boolean",
+                      "nullable": true
+                    },
                     "lastMove": {
                       "type": "string"
                     },
@@ -112,6 +137,9 @@ export default {
                   "required": [
                     "id",
                     "address",
+                    "challenge",
+                    "signatureVerified",
+                    "worldcoinVerified",
                     "lastMove",
                     "createdAt"
                   ]
@@ -122,30 +150,30 @@ export default {
         }
       }
     },
-    "/players/signature": {
+    "/players/verify-signature": {
       "post": {
-        "operationId": "requestSignature",
-        "summary": "Request signature",
+        "operationId": "verifyPlayerSignature",
+        "summary": "Verify player",
         "tags": [
           "Players"
         ],
-        "description": "Request a signature for a player",
+        "description": "Verify player signature",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "senderAddress": {
+                  "address": {
                     "type": "string"
                   },
-                  "transferContractAddress": {
+                  "signature": {
                     "type": "string"
                   }
                 },
                 "required": [
-                  "senderAddress",
-                  "transferContractAddress"
+                  "address",
+                  "signature"
                 ]
               }
             }
@@ -153,27 +181,112 @@ export default {
         },
         "responses": {
           "201": {
-            "description": "Created player successfully.",
+            "description": "Verified player successfully.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "id": {
+                    "token": {
                       "type": "string"
                     },
-                    "signature": {
-                      "type": "string"
-                    },
-                    "deadline": {
-                      "type": "string",
-                      "pattern": "^d+$"
+                    "player": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "address": {
+                          "type": "string"
+                        },
+                        "challenge": {
+                          "type": "string"
+                        },
+                        "signatureVerified": {
+                          "type": "boolean",
+                          "nullable": true
+                        },
+                        "worldcoinVerified": {
+                          "type": "boolean",
+                          "nullable": true
+                        },
+                        "lastMove": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "address",
+                        "challenge",
+                        "signatureVerified",
+                        "worldcoinVerified",
+                        "lastMove",
+                        "createdAt"
+                      ]
                     }
                   },
                   "required": [
-                    "id",
-                    "signature",
-                    "deadline"
+                    "token",
+                    "player"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/players/verify-worldcoin": {
+      "post": {
+        "operationId": "verifyWorldIdPlayer",
+        "summary": "Verify WORLDID player",
+        "tags": [
+          "Players"
+        ],
+        "description": "Verify worldID player signature",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "Bearer SECRET"
+            },
+            "required": true,
+            "name": "authorization",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "worldCoinSignature": {
+                    "nullable": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Verified player successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "ok"
                   ]
                 }
               }
@@ -467,6 +580,17 @@ export default {
                     },
                     "createdAt": {
                       "type": "string"
+                    },
+                    "winnerId": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "ongoing",
+                        "finished"
+                      ]
                     }
                   },
                   "required": [
@@ -474,7 +598,9 @@ export default {
                     "playerId",
                     "xCoordinate",
                     "yCoordinate",
-                    "createdAt"
+                    "createdAt",
+                    "winnerId",
+                    "status"
                   ]
                 }
               }

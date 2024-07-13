@@ -1,22 +1,23 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/apiClient";
 
-export const useCreatePlayer = (props?: {
+export const useCreateMove = (props?: {
   onSuccess?: () => void;
   onError?: () => void;
 }) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (variables: { address: string }) => {
-      if (!variables.address) throw new Error("No player address");
-      const result = await apiClient["/players"].post({
-        json: { address: variables.address.toLowerCase() },
+    mutationFn: async (variables: { gameId: string; playerId: string }) => {
+      const result = await apiClient[
+        "/games/{gameId}/players/{playerId}/moves"
+      ].post({
+        params: { gameId: variables.gameId, playerId: variables.playerId },
       });
       await queryClient.invalidateQueries();
       return result;
     },
     onError: (error) => {
-      console.error("Error creating player", error);
+      console.error("Error creating move", error);
       props?.onError?.();
     },
     onSuccess: () => {

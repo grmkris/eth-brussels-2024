@@ -3,8 +3,7 @@
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Dynamic from "@/components/Dynamic";
 import { useState } from "react";
-import { ConnectWallet } from "@/components/Profile";
-import { usePlayPosition } from "../hooks/actions/usePlayPosition";
+import { Menu } from "@/components/Menu";
 
 export const App = (props: { children: React.ReactNode }) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -29,19 +28,7 @@ export const App = (props: { children: React.ReactNode }) => {
     <Dynamic>
       <div className="w-fit fixed inset-0 z-10" onClick={handleClickOutside}>
         <div className="h-screen flex overflow-hidden bg-gray-200">
-          <div
-            id="sidebar"
-            className={`z-20 absolute bg-gray-800 text-white w-[40vw] min-h-screen overflow-y-auto transition-transform transform ${
-              sidebarOpen ? "translate-x-0" : "-translate-x-full"
-            } ease-in-out duration-300`}
-          >
-            <div className="p-4">
-              <h1 className="text-2xl font-semibold">Sidebar</h1>
-              <ul className="mt-4">
-                <ConnectWallet />
-              </ul>
-            </div>
-          </div>
+          <Menu sidebarOpen={sidebarOpen} />
 
           <div className="shadow w-fit fixed top-0 left-0 z-10">
             <button

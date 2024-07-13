@@ -1,4 +1,4 @@
-import { SelectMovesWithAddress } from "../db/movesStorage.db";
+import { SelectMove, SelectMovesWithAddress } from "../db/movesStorage.db";
 
 export function create2DArray(
   rows: number, cols: number
@@ -27,4 +27,4 @@ export function applyMoves(array2D: {
         console.error(`Move out of bounds: (${xCoordinate}, ${yCoordinate})`);
       }
     }
-  }
+  };

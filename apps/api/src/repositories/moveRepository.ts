@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { db } from "../db/db";
 import { CreateMove, Moves, SelectMove, SelectMovesWithAddress } from "../db/movesStorage.db";
 import { Players } from "../db/playersStorage.db";
@@ -9,13 +9,31 @@ export const moveRepository = (config: {
 }) => {
     const { db } = config;
 
-    const findManyByPlayerId = async (props: {
+    const findManyByGameIdAndPlayerId = async (props: {
+        gameId: string;
         playerId: string;
     }): Promise<SelectMove[]> => {
         const moves = await db
-            .select()
+            .select({
+                id: Moves.id,
+                playerId: Moves.playerId,
+                xCoordinate: Moves.xCoordinate,
+                yCoordinate: Moves.yCoordinate,
+                createdAt: Moves.createdAt,
+            })
             .from(Moves)
-            .where(eq(Moves.playerId, props.playerId))
+            .innerJoin(
+                Players,
+                eq(Players.id, Moves.playerId),
+            )
+            .innerJoin(
+                GamePlayers,
+                eq(GamePlayers.playerId, Players.id),
+            )
+            .where(and(
+                eq(Moves.playerId, props.playerId),
+                eq(GamePlayers.gameId, props.gameId),
+            ))
             .execute();
 
         return moves;
@@ -65,7 +83,7 @@ export const moveRepository = (config: {
     };
 
     return {
-        findManyByPlayerId,
+        findManyByGameIdAndPlayerId,
         findManyByGameId,
         create,
     }
