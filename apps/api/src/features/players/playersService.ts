@@ -1,6 +1,6 @@
 import { PlayerRepository } from "../../repositories/playerRepository";
 import { HTTPException } from "hono/http-exception";
-import { Address, Signature, verifyMessage } from "viem";
+import { Address, getAddress, Signature, verifyMessage } from "viem";
 import { sign, verify } from "hono/jwt";
 
 export const playersService = (deps: {
@@ -22,7 +22,7 @@ export const playersService = (deps: {
 
   const getPlayerByAddress = async (props: { address: string }) => {
     const player = await deps.playerRepository.findByAddress({
-      address: props.address,
+      address: getAddress(props.address),
     });
 
     if (!player) {
@@ -36,7 +36,7 @@ export const playersService = (deps: {
 
   const getOrCreatePlayerByAddress = async (props: { address: string }) => {
     const player = await deps.playerRepository.findByAddress({
-      address: props.address,
+      address: getAddress(props.address),
     });
     if (player) {
       // if signature is verified, create new challenge and update player with new challenge
@@ -60,24 +60,25 @@ export const playersService = (deps: {
     address: Address;
   }) => {
     const player = await deps.playerRepository.findByAddress({
-      address: props.address,
+      address: getAddress(props.address),
     });
 
     if (!player) throw new Error("Player not found");
 
     const payload = {
-      address: props.address,
+      address: getAddress(props.address),
       message: player.challenge,
       signature: props.signature,
     };
     const valid = await verifyMessage(payload);
+    console.log("valid", valid);
     if (!valid) throw new Error("Invalid signature");
     //generate JWT
     const secret = "mySecretKey";
     const token = await sign(payload, secret);
 
     const updatedPlayer = await deps.playerRepository.update({
-      address: props.address,
+      address: getAddress(props.address),
       signatureVerified: valid,
       worldcoinVerified: player.worldcoinVerified ?? false,
     });

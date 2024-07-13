@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/apiClient";
-import { playersOutput } from "@/schemas/playerSchemas";
 import { useAccount } from "wagmi";
 
 export const useGetPlayer = () => {
@@ -13,15 +12,7 @@ export const useGetPlayer = () => {
       const player = await apiClient["/players/{address}"].get({
         params: { address: account.address },
       });
-      const parsedPlayer = playersOutput.safeParse(player);
-      if (!parsedPlayer.success) {
-        console.error("Failed to parse useGetPlayer", {
-          data: parsedPlayer,
-          error: parsedPlayer.error,
-        });
-        throw new Error("Failed to parse useGetPlayer", parsedPlayer.error);
-      }
-      return parsedPlayer.data;
+      return await player.json();
     },
   });
 };
