@@ -18,7 +18,7 @@ export const GameArea = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const [panStart, setPanStart] = useState<{ x: number; y: number } | null>(
-    null
+    null,
   );
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const initialSize = 400;
@@ -29,7 +29,7 @@ export const GameArea = ({
     id: getGames.data?.[getGames.data.length - 1]?.id ?? "",
   });
   const [isOpen, setIsOpen] = useState(
-    !!getGames.data?.[getGames.data.length - 1]?.winnerId
+    !!getGames.data?.[getGames.data.length - 1]?.winnerId,
   );
 
   useEffect(() => {
@@ -89,11 +89,11 @@ export const GameArea = ({
 
         const prevDynamicSize = Math.max(
           minSquareSize,
-          initialSize / prevZoomLevel
+          initialSize / prevZoomLevel,
         );
         const newDynamicSize = Math.max(
           minSquareSize,
-          initialSize / newZoomLevel
+          initialSize / newZoomLevel,
         );
 
         const scrollLeft =
@@ -163,7 +163,7 @@ export const GameArea = ({
             const row = Math.floor(i / gridSize);
             const column = i % gridSize;
             const square = indices.find(
-              (index) => index.row === row && index.column === column
+              (index) => index.row === row && index.column === column,
             );
             const hasIcon = square !== undefined;
             const address = square?.address;

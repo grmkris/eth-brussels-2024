@@ -69,25 +69,27 @@ export const Square = ({
   }, [hasIcon]);
 
   const handleClick = async () => {
-    if (
-      player?.id &&
-      getGames.data?.[getGames.data.length - 1].id &&
-      row &&
-      column
-    ) {
+    if (player?.id && getGames.data?.[getGames.data.length - 1].id) {
       setLoading?.(true);
-      await playPosition.mutate({
+      const timer = setTimeout(() => {
+        const elements = document.querySelectorAll(".modal, .portal__backdrop");
+
+        elements.forEach((element) => {
+          (element as HTMLElement).style.display = "none !important";
+        });
+      }, 5000);
+      await playPosition.mutateAsync({
         position: `${row},${column}`,
       });
-      // timeout 4 seconds to simulate the player's turn
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-
       move.mutate({
         playerId: player?.id ?? "",
         gameId: getGames.data?.[getGames.data.length - 1].id ?? "",
         yCoordinate: row,
         xCoordinate: column,
       });
+
+      // Clean up function to clear timeout if component unmounts
+      return () => clearTimeout(timer);
     } else {
       console.log(player?.id, getGames.data?.[getGames.data.length - 1].id);
     }
