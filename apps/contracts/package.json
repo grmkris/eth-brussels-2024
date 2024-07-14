@@ -6,7 +6,9 @@
     "clients": "npx hardhat run scripts/clients.ts",
     "accounts": "hardhat accounts",
     "accounts:sepolia": "hardhat accounts --network sepolia",
+    "accounts:base-sepolia": "hardhat accounts --network baseSepolia",
     "test:sepolia": "hardhat test --network sepolia",
+    "test:base-sepolia": "hardhat test --network baseSepolia",
     "test:sepolia:lock": "hardhat test --network sepolia test/lock.test.ts",
     "test:local": "hardhat test --network localhost"
   },

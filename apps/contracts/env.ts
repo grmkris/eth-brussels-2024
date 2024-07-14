@@ -4,6 +4,7 @@ import "dotenv/config";
 
 export const ENV = parseEnv(process.env, {
   SEPOLIA_URL: z.string(),
+  BASE_SEPOLIA_URL: z.string(),
   MAINET_URL: z.string(),
   DEPLOYER_MNEMONIC: z.string(),
   OPERATOR_MNEMONIC: z.string(),

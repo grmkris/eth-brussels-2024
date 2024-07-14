@@ -25,9 +25,8 @@ const WRAPPED_NATIVE_CURRENCY_ADDRESS =
 const FEE_DESTINATION = mnemonicToAccount(ENV.FEE_MNEMONIC).address;
 const OPERATOR = mnemonicToAccount(ENV.OPERATOR_MNEMONIC).address;
 
-const NOUNS_ERC20_TOKEN = "0x34182d56d905a195524a8F1813180C134687ca34";
-
 const as = TIC_TAC_TOCE_ADDRESSES.baseSepolia;
+const ERC20_TOKEN = as.ERC20_ADDRESS;
 
 describe("Transfers", function () {
   // We define a fixture to reuse the same setup in every test.
@@ -78,7 +77,7 @@ describe("Transfers", function () {
     const { vault } = await hre.ignition.deploy(VaultModule, {
       parameters: {
         VaultModule: {
-          token: NOUNS_ERC20_TOKEN,
+          token: ERC20_TOKEN,
         },
       },
     });
@@ -103,7 +102,7 @@ describe("Transfers", function () {
 
       await transferTokenPreApproved({
         chain: a.chain,
-        token: NOUNS_ERC20_TOKEN,
+        token: ERC20_TOKEN as Address,
         transferContract: transfers.address,
         recipientAddress: vault.address,
       });

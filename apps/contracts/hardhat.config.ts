@@ -2,12 +2,16 @@ import { HardhatUserConfig, task } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox-viem";
 import "@nomicfoundation/hardhat-ignition-viem";
 import "@nomicfoundation/hardhat-viem";
-import { formatEther } from "viem";
+import { Address, formatEther } from "viem";
+import { sepolia } from "viem/chains";
 import { ENV } from "./env";
 import { mnemonicToAccount } from "viem/accounts";
 import { Erc20Abi } from "./sdk/transfer.abi";
+import { TIC_TAC_TOCE_ADDRESSES } from "schemas/addresses.schema";
 
-const NOUNS_ERC20_TOKEN = "0x34182d56d905a195524a8F1813180C134687ca34"
+const chain = TIC_TAC_TOCE_ADDRESSES.baseSepolia
+
+const ERC20_TOKEN = chain.ERC20_ADDRESS;
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -40,6 +44,12 @@ const config: HardhatUserConfig = {
         mnemonic: ENV.DEPLOYER_MNEMONIC,
       },
     },
+    baseSepolia: {
+      url: ENV.BASE_SEPOLIA_URL,
+      accounts: {
+        mnemonic: ENV.DEPLOYER_MNEMONIC,
+      },
+    },
   },
   mocha: {
     timeout: 1000000,
@@ -59,14 +69,21 @@ task(
       const balance = await deployerClient.getBalance({
         address: account.account.address,
       });
-      const balanceof = await deployerClient.readContract({
-        address: NOUNS_ERC20_TOKEN,
+
+      let balanceof = 0n;
+
+      balanceof = await deployerClient.readContract({
+        address: ERC20_TOKEN as Address,
         abi: Erc20Abi,
         functionName: "balanceOf",
         args: [account.account.address],
-      })
+      });
 
-      console.log(`${account.account.address}: ${formatEther(balance)} ETH, ${formatEther(balanceof)} NOUNS`);
+      console.log(
+        `${account.account.address}: ${formatEther(balance)} ETH, ${formatEther(
+          balanceof
+        )} erc20`
+      );
     }
 
     const operator = mnemonicToAccount(ENV.OPERATOR_MNEMONIC);
@@ -80,7 +97,7 @@ task(
     });
 
     console.log(
-      `Operator ${operator.address}: ${formatEther(operatorBalance)} ETH`,
+      `Operator ${operator.address}: ${formatEther(operatorBalance)} ETH`
     );
     const feeRecipientBalance = await deployerClient.getBalance({
       address: feeRecipient.address,
@@ -88,8 +105,8 @@ task(
 
     console.log(
       `Fee recipient ${feeRecipient.address}: ${formatEther(
-        feeRecipientBalance,
-      )} ETH`,
+        feeRecipientBalance
+      )} ETH`
     );
 
     const senderRecipientBalance = await deployerClient.getBalance({
@@ -98,8 +115,8 @@ task(
 
     console.log(
       `Sender recipient ${senderRecipient.address}: ${formatEther(
-        senderRecipientBalance,
-      )} ETH`,
+        senderRecipientBalance
+      )} ETH`
     );
-  },
+  }
 );
