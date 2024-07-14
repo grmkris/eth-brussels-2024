@@ -13,6 +13,7 @@ export const Square = ({
   player,
   isNewGame = false,
   hasIcon = false, // New prop added
+  address,
   setLoading,
 }: {
   size: number;
@@ -21,6 +22,7 @@ export const Square = ({
   player?: PlayersOutput;
   isNewGame?: boolean;
   hasIcon?: boolean; // New prop added
+  address?: string;
   setLoading?: (loading: boolean) => void;
 }) => {
   const [animationState, setAnimationState] = useState<
@@ -108,7 +110,7 @@ export const Square = ({
             width={size}
             height={size}
             src={`https://noun.pics/${CalculateUuidToNumber(
-              player?.id ?? "",
+              address ?? ""
             )}.jpg`}
             alt=""
           />

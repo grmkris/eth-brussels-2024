@@ -18,7 +18,7 @@ export const GameArea = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const [panStart, setPanStart] = useState<{ x: number; y: number } | null>(
-    null,
+    null
   );
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const initialSize = 400;
@@ -29,7 +29,7 @@ export const GameArea = ({
     id: getGames.data?.[getGames.data.length - 1]?.id ?? "",
   });
   const [isOpen, setIsOpen] = useState(
-    !!getGames.data?.[getGames.data.length - 1]?.winnerId,
+    !!getGames.data?.[getGames.data.length - 1]?.winnerId
   );
 
   useEffect(() => {
@@ -89,11 +89,11 @@ export const GameArea = ({
 
         const prevDynamicSize = Math.max(
           minSquareSize,
-          initialSize / prevZoomLevel,
+          initialSize / prevZoomLevel
         );
         const newDynamicSize = Math.max(
           minSquareSize,
-          initialSize / newZoomLevel,
+          initialSize / newZoomLevel
         );
 
         const scrollLeft =
@@ -119,13 +119,17 @@ export const GameArea = ({
 
   const dynamicSize = Math.max(minSquareSize, initialSize / zoomLevel);
 
-  let indices: { row: number; column: number }[] = [];
+  let indices: { row: number; column: number; address: string }[] = [];
 
   if (getGame.data && getGame.data?.map?.length !== 0) {
     for (let i = 0; i < getGame.data?.map?.length!; i++) {
       for (let j = 0; j < getGame.data?.map?.[i]!.length!; j++) {
         if (getGame.data?.map?.[i]?.[j].playerAddress !== null) {
-          indices.push({ column: i, row: j });
+          indices.push({
+            column: i,
+            row: j,
+            address: getGame.data?.map?.[i]?.[j].playerAddress as string,
+          });
         }
       }
     }
@@ -158,12 +162,16 @@ export const GameArea = ({
           {Array.from({ length: gridSize * gridSize }).map((_, i) => {
             const row = Math.floor(i / gridSize);
             const column = i % gridSize;
-            const hasIcon = indices.some(
-              (index) => index.row === row && index.column === column,
+            const square = indices.find(
+              (index) => index.row === row && index.column === column
             );
+            const hasIcon = square !== undefined;
+            const address = square?.address;
+
             return (
               <Square
                 setLoading={setIsLoading}
+                address={address}
                 isNewGame={!getGames.data?.[getGames.data.length - 1]?.winnerId}
                 player={player.data}
                 key={i}
