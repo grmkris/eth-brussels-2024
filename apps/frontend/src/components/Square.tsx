@@ -12,12 +12,14 @@ export const Square = ({
   column,
   player,
   isNewGame = false,
+  setLoading,
 }: {
   size: number;
   row: number;
   column: number;
   player?: PlayersOutput;
   isNewGame?: boolean;
+  setLoading: (loading: boolean) => void;
 }) => {
   const [hasIcon, setHasIcon] = useState(false);
   const [animationState, setAnimationState] = useState<
@@ -26,11 +28,19 @@ export const Square = ({
   const move = useCreateMove({
     onSuccess: () => {
       setHasIcon(true);
+      setLoading(false);
+    },
+    onError: () => {
+      setLoading(false);
     },
   });
   const playPosition = usePlayPosition({
     onSuccess: () => {
       setHasIcon(true);
+      setLoading(false);
+    },
+    onError: () => {
+      setLoading(false);
     },
   });
   const getGames = useGetGames();
@@ -60,6 +70,7 @@ export const Square = ({
       row &&
       column
     ) {
+      setLoading(true);
       await playPosition.mutateAsync({
         position: `${row},${column}`,
       });
@@ -91,7 +102,7 @@ export const Square = ({
             width={size}
             height={size}
             src={`https://noun.pics/${CalculateUuidToNumber(
-              player?.id ?? "",
+              player?.id ?? ""
             )}.jpg`}
             alt=""
           />
