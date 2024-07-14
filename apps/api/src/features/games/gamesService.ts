@@ -12,7 +12,7 @@ export const gamesService = (deps: {
         id: string;
     }) => {
         // Hardcoded size
-        const size = 100;
+        const size = 35;
 
         // Get the game
         const game = await deps.gameRepository.findOneById({
