@@ -15,8 +15,10 @@ export const GameArea = ({
   const [gridSize, setGridSize] = useState(initialGridSize);
   const [zoomLevel, setZoomLevel] = useState(initialZoomLevel);
   const [panning, setPanning] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const [panStart, setPanStart] = useState<{ x: number; y: number } | null>(
-    null,
+    null
   );
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const initialSize = 400;
@@ -27,7 +29,7 @@ export const GameArea = ({
     id: getGames.data?.[getGames.data.length - 1]?.id ?? "",
   });
   const [isOpen, setIsOpen] = useState(
-    !!getGames.data?.[getGames.data.length - 1]?.winnerId,
+    !!getGames.data?.[getGames.data.length - 1]?.winnerId
   );
 
   useEffect(() => {
@@ -87,11 +89,11 @@ export const GameArea = ({
 
         const prevDynamicSize = Math.max(
           minSquareSize,
-          initialSize / prevZoomLevel,
+          initialSize / prevZoomLevel
         );
         const newDynamicSize = Math.max(
           minSquareSize,
-          initialSize / newZoomLevel,
+          initialSize / newZoomLevel
         );
 
         const scrollLeft =
