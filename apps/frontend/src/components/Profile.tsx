@@ -29,16 +29,14 @@ export const SignInWithWallet = (props: { player?: PlayersOutput }) => {
 
   return (
     <>
-      {!props.player?.signatureVerified && (
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md h-10"
-          onClick={() =>
-            connectPlayer.mutate({ address: account.address as string })
-          }
-        >
-          Verify: {account.address}
-        </button>
-      )}
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md h-10"
+        onClick={() =>
+          connectPlayer.mutate({ address: account.address as string })
+        }
+      >
+        Verify: {account.address}
+      </button>
     </>
   );
 };
