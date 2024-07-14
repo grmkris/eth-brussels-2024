@@ -3,6 +3,7 @@ import { Square } from "@/components/Square";
 import { useGetPlayer } from "@/hooks/player/useGetPlayer";
 import { useGetGames } from "@/hooks/games/useGetGames";
 import { WinnerModal } from "@/components/WinnerModal";
+import { useGetGame } from "@/hooks/games/useGetGame";
 
 export const GameArea = ({
   initialGridSize,
@@ -14,17 +15,21 @@ export const GameArea = ({
   const [gridSize, setGridSize] = useState(initialGridSize);
   const [zoomLevel, setZoomLevel] = useState(initialZoomLevel);
   const [panning, setPanning] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [panStart, setPanStart] = useState<{ x: number; y: number } | null>(
-    null,
+    null
   );
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const initialSize = 400;
   const minSquareSize = 50;
   const player = useGetPlayer();
   const getGames = useGetGames();
+  const getGame = useGetGame({
+    id: getGames.data?.[getGames.data.length - 1]?.id ?? "",
+  });
   const [isOpen, setIsOpen] = useState(
-    !!getGames.data?.[getGames.data.length - 1]?.winnerId,
+    !!getGames.data?.[getGames.data.length - 1]?.winnerId
   );
 
   useEffect(() => {
@@ -84,11 +89,11 @@ export const GameArea = ({
 
         const prevDynamicSize = Math.max(
           minSquareSize,
-          initialSize / prevZoomLevel,
+          initialSize / prevZoomLevel
         );
         const newDynamicSize = Math.max(
           minSquareSize,
-          initialSize / newZoomLevel,
+          initialSize / newZoomLevel
         );
 
         const scrollLeft =
@@ -113,6 +118,18 @@ export const GameArea = ({
   };
 
   const dynamicSize = Math.max(minSquareSize, initialSize / zoomLevel);
+
+  let indices: { row: number; column: number }[] = [];
+
+  if (getGame.data && getGame.data?.map?.length !== 0) {
+    for (let i = 0; i < getGame.data?.map?.length!; i++) {
+      for (let j = 0; j < getGame.data?.map?.[i]!.length!; j++) {
+        if (getGame.data?.map?.[i]?.[j].playerAddress !== null) {
+          indices.push({ column: i, row: j });
+        }
+      }
+    }
+  }
 
   return (
     <div
@@ -140,6 +157,9 @@ export const GameArea = ({
         {Array.from({ length: gridSize * gridSize }).map((_, i) => {
           const row = Math.floor(i / gridSize);
           const column = i % gridSize;
+          const hasIcon = indices.some(
+            (index) => index.row === row && index.column === column,
+          );
           return (
             <Square
               isNewGame={!getGames.data?.[getGames.data.length - 1]?.winnerId}
@@ -148,6 +168,7 @@ export const GameArea = ({
               size={dynamicSize}
               row={row}
               column={column}
+              hasIcon={hasIcon}
             />
           );
         })}

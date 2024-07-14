@@ -11,11 +11,22 @@ export const Games = z.object({
   updatedAt: z.string().datetime(),
 });
 export const gameOutput = z.object({
-  id: z.string().uuid(),
+  id: z.string().uuid().nullish(),
   status: z.string(),
-  winnerId: z.string().uuid().nullable(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  winnerId: z.string().uuid().nullish(),
+  createdAt: z.string().datetime().nullish(),
+  updatedAt: z.string().datetime().nullish(),
+  map: z
+    .array(
+      z
+        .array(
+          z.object({
+            playerAddress: z.string().nullable(),
+          }),
+        )
+        .nullish(),
+    )
+    .nullish(),
 });
 
 export const gamesOutput = z.array(gameOutput);

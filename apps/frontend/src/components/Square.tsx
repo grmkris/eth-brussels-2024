@@ -12,32 +12,43 @@ export const Square = ({
   column,
   player,
   isNewGame = false,
+  hasIcon = false, // New prop added
+  setLoading,
 }: {
   size: number;
   row: number;
   column: number;
   player?: PlayersOutput;
   isNewGame?: boolean;
+  hasIcon?: boolean; // New prop added
+  setLoading: (loading: boolean) => void;
 }) => {
-  const [hasIcon, setHasIcon] = useState(false);
   const [animationState, setAnimationState] = useState<
     "none" | "scaling" | "pulse"
   >("none");
   const move = useCreateMove({
     onSuccess: () => {
-      setHasIcon(true);
+      // setHasIcon(true); // No need to set hasIcon in this component
+      setLoading(false);
+    },
+    onError: () => {
+      setLoading(false);
     },
   });
   const playPosition = usePlayPosition({
     onSuccess: () => {
-      setHasIcon(true);
+      // setHasIcon(true); // No need to set hasIcon in this component
+      setLoading(false);
+    },
+    onError: () => {
+      setLoading(false);
     },
   });
   const getGames = useGetGames();
 
   useEffect(() => {
     if (isNewGame) {
-      setHasIcon(false);
+      // setHasIcon(false); // No need to set hasIcon in this component
     }
   }, [isNewGame]);
 
@@ -60,6 +71,7 @@ export const Square = ({
       row &&
       column
     ) {
+      setLoading(true);
       await playPosition.mutateAsync({
         position: `${row},${column}`,
       });
@@ -91,7 +103,7 @@ export const Square = ({
             width={size}
             height={size}
             src={`https://noun.pics/${CalculateUuidToNumber(
-              player?.id ?? "",
+              player?.id ?? ""
             )}.jpg`}
             alt=""
           />
