@@ -15,6 +15,7 @@ export const GameArea = ({
   const [gridSize, setGridSize] = useState(initialGridSize);
   const [zoomLevel, setZoomLevel] = useState(initialZoomLevel);
   const [panning, setPanning] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [panStart, setPanStart] = useState<{ x: number; y: number } | null>(
     null,
@@ -158,7 +159,7 @@ export const GameArea = ({
             const row = Math.floor(i / gridSize);
             const column = i % gridSize;
             const hasIcon = indices.some(
-              (index) => index.row === row && index.column === column
+              (index) => index.row === row && index.column === column,
             );
             return (
               <Square
