@@ -470,6 +470,26 @@ export default {
                       },
                       "updatedAt": {
                         "type": "string"
+                      },
+                      "map": {
+                        "type": "array",
+                        "items": {
+                          "type": "array",
+                          "nullable": true,
+                          "items": {
+                            "type": "object",
+                            "nullable": true,
+                            "properties": {
+                              "playerAddress": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "playerAddress"
+                            ]
+                          }
+                        }
                       }
                     },
                     "required": [
@@ -477,7 +497,8 @@ export default {
                       "status",
                       "winnerId",
                       "createdAt",
-                      "updatedAt"
+                      "updatedAt",
+                      "map"
                     ]
                   }
                 }
@@ -520,6 +541,26 @@ export default {
                     },
                     "updatedAt": {
                       "type": "string"
+                    },
+                    "map": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "nullable": true,
+                        "items": {
+                          "type": "object",
+                          "nullable": true,
+                          "properties": {
+                            "playerAddress": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "playerAddress"
+                          ]
+                        }
+                      }
                     }
                   },
                   "required": [
@@ -527,7 +568,8 @@ export default {
                     "status",
                     "winnerId",
                     "createdAt",
-                    "updatedAt"
+                    "updatedAt",
+                    "map"
                   ]
                 }
               }
