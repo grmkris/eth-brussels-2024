@@ -21,7 +21,7 @@ export const Square = ({
   player?: PlayersOutput;
   isNewGame?: boolean;
   hasIcon?: boolean; // New prop added
-  setLoading: (loading: boolean) => void;
+  setLoading?: (loading: boolean) => void;
 }) => {
   const [animationState, setAnimationState] = useState<
     "none" | "scaling" | "pulse"
@@ -29,19 +29,19 @@ export const Square = ({
   const move = useCreateMove({
     onSuccess: () => {
       // setHasIcon(true); // No need to set hasIcon in this component
-      setLoading(false);
+      setLoading?.(false);
     },
     onError: () => {
-      setLoading(false);
+      setLoading?.(false);
     },
   });
   const playPosition = usePlayPosition({
     onSuccess: () => {
       // setHasIcon(true); // No need to set hasIcon in this component
-      setLoading(false);
+      setLoading?.(false);
     },
     onError: () => {
-      setLoading(false);
+      setLoading?.(false);
     },
   });
   const getGames = useGetGames();
@@ -71,7 +71,7 @@ export const Square = ({
       row &&
       column
     ) {
-      setLoading(true);
+      setLoading?.(true);
       await playPosition.mutateAsync({
         position: `${row},${column}`,
       });
@@ -92,10 +92,15 @@ export const Square = ({
         width: `${size}px`,
         height: `${size}px`,
       }}
-      className={`cursor-pointer rounded-md relative border-2 border-black bg-gray-800 overflow-hidden transform transition-transform duration-500 ${
+      className={`rounded-md relative border-2 border-black bg-gray-800 overflow-hidden transform transition-transform duration-500 hover:bg-purple-800 ${
         animationState === "scaling" ? "scale-150" : ""
-      }`}
-      onClick={handleClick}
+      } ${hasIcon ? "cursor-not-allowed" : "cursor-pointer"}`}
+      aria-disabled={hasIcon}
+      onClick={() => {
+        if (!hasIcon) {
+          handleClick();
+        }
+      }}
     >
       {hasIcon ? (
         <div className="absolute inset-0 flex items-center justify-center">
@@ -103,7 +108,7 @@ export const Square = ({
             width={size}
             height={size}
             src={`https://noun.pics/${CalculateUuidToNumber(
-              player?.id ?? ""
+              player?.id ?? "",
             )}.jpg`}
             alt=""
           />

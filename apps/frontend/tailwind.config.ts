@@ -12,8 +12,16 @@ const config: Config = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        fireworks:
+          "radial-gradient(circle, #f9f9f9 20%, transparent 20%), radial-gradient(circle, #f9f9f9 20%, transparent 20%)",
       },
       keyframes: {
+        fireworks: {
+          "0%": { opacity: "0", transform: "translateY(-100%)" },
+          "10%": { opacity: "1", transform: "translateY(0)" },
+          "90%": { opacity: "1", transform: "translateY(0)" },
+          "100%": { opacity: "0", transform: "translateY(-100%)" },
+        },
         rainbow: {
           "0%, 100%": { color: "#b70505" }, // Red
           "16%": { color: "#FF7F00" }, // Orange
@@ -29,10 +37,17 @@ const config: Config = {
           "100%": { fill: "#4e23ce" }, // Color 3
         },
       },
+      backgroundSize: {
+        fireworks: "50px 50px",
+      },
+      backgroundPosition: {
+        fireworks: "0 0, 25px 25px",
+      },
       animation: {
         rainbow: "rainbow 3s linear infinite",
         customRainbow: "customRainbow 2s linear infinite",
         moveRight: "moveRight 2s ease-in-out infinite",
+        fireworks: "fireworks 3s ease-in-out infinite",
       },
     },
   },
