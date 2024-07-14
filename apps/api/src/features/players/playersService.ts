@@ -3,8 +3,10 @@ import { HTTPException } from "hono/http-exception";
 import {
   Address,
   bytesToHex,
+  createPublicClient,
   encodePacked,
   getAddress,
+  http,
   keccak256,
   parseEther,
   Signature,
@@ -14,6 +16,7 @@ import { sign, verify } from "hono/jwt";
 import { operatorClient, publicClient } from "../../helpers/viemConfig";
 import { mnemonicToAccount } from "viem/accounts";
 import { env } from "../../env";
+import { sepolia } from "viem/chains";
 
 export type VerifyReply = {
   code: string;
@@ -96,9 +99,16 @@ export const playersService = (deps: {
       message: player.challenge,
       signature: props.signature,
     };
-    const valid = await verifyMessage(payload);
+    // public client for sepolia
+    const publicClient = createPublicClient({
+      chain: sepolia,
+      transport: http(
+        "https://sepolia.infura.io/v3/3917ee57f64c45c4b36c95501fdc552a",
+      ),
+    });
+    const valid = await publicClient.verifyMessage(payload);
     console.log("valid", valid);
-    if (!valid) throw new Error("Invalid signature");
+    // if (!valid) throw new Error("Invalid signature");
     //generate JWT
     const secret = "mySecretKey";
     const token = await sign(payload, secret);

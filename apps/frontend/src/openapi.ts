@@ -36,8 +36,7 @@ export default {
                   "type": "object",
                   "properties": {
                     "id": {
-                      "type": "string",
-                      "format": "uuid"
+                      "type": "string"
                     },
                     "address": {
                       "type": "string"
@@ -110,8 +109,7 @@ export default {
                   "type": "object",
                   "properties": {
                     "id": {
-                      "type": "string",
-                      "format": "uuid"
+                      "type": "string"
                     },
                     "address": {
                       "type": "string"
@@ -194,8 +192,7 @@ export default {
                       "type": "object",
                       "properties": {
                         "id": {
-                          "type": "string",
-                          "format": "uuid"
+                          "type": "string"
                         },
                         "address": {
                           "type": "string"

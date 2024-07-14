@@ -55,6 +55,13 @@ export const movesService = (deps: {
                     status: "finished",
                 },
             });
+
+            // Delete all player moves from the game
+            await deps.moveRepository.deleteManyByGameIdAndPlayerId({
+                gameId: props.gameId,
+                playerId: props.playerId,
+            });
+
         } else {
             gameData = {
                 id: props.gameId,
