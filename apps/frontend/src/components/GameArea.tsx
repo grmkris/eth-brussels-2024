@@ -3,6 +3,7 @@ import { Square } from "@/components/Square";
 import { useGetPlayer } from "@/hooks/player/useGetPlayer";
 import { useGetGames } from "@/hooks/games/useGetGames";
 import { WinnerModal } from "@/components/WinnerModal";
+import { useGetGame } from "@/hooks/games/useGetGame";
 
 export const GameArea = ({
   initialGridSize,
@@ -24,6 +25,10 @@ export const GameArea = ({
   const minSquareSize = 50;
   const player = useGetPlayer();
   const getGames = useGetGames();
+  const getGame = useGetGame({
+    id: getGames.data?.[getGames.data.length - 1]?.id ?? "",
+  });
+  console.log("getGame", getGame.data);
   const [isOpen, setIsOpen] = useState(
     !!getGames.data?.[getGames.data.length - 1]?.winnerId
   );
