@@ -72,12 +72,12 @@ export const Square = ({
     if (player?.id && getGames.data?.[getGames.data.length - 1].id) {
       setLoading?.(true);
       const timer = setTimeout(() => {
-        const elements = document.querySelectorAll(".modal, .portal__backdrop");
-
-        elements.forEach((element) => {
-          (element as HTMLElement).style.display = "none !important";
-        });
-      }, 5000);
+        const element = document.getElementById("dynamic-send-transaction");
+        if (element) {
+          element.style.display = "none";
+        }
+        setLoading?.(false);
+      }, 10000);
       await playPosition.mutateAsync({
         position: `${row},${column}`,
       });
