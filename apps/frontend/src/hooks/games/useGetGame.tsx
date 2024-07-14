@@ -6,6 +6,7 @@ export const useGetGame = (props: { id: string }) => {
   return useQuery({
     enabled: !!props.id,
     queryKey: ["useGetGame"],
+    refetchInterval: 2000,
     queryFn: async () => {
       if (!props.id) throw new Error("No game id");
       const game = await apiClient["/games/{id}"].get({

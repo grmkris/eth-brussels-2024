@@ -5,6 +5,7 @@ import { useCreateMove } from "@/hooks/moves/useCreateMove";
 import { CalculateUuidToNumber } from "@/utils/CalculateUuidToNumber";
 import { PlayersOutput } from "@/schemas/playerSchemas";
 import { usePlayPosition } from "@/hooks/actions/usePlayPosition";
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 
 export const Square = ({
   size,
@@ -25,6 +26,7 @@ export const Square = ({
   address?: string;
   setLoading?: (loading: boolean) => void;
 }) => {
+  const { setShowDynamicUserProfile } = useDynamicContext();
   const [animationState, setAnimationState] = useState<
     "none" | "scaling" | "pulse"
   >("none");
@@ -74,9 +76,12 @@ export const Square = ({
       column
     ) {
       setLoading?.(true);
-      await playPosition.mutateAsync({
+      await playPosition.mutate({
         position: `${row},${column}`,
       });
+      // timeout 4 seconds to simulate the player's turn
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+
       move.mutate({
         playerId: player?.id ?? "",
         gameId: getGames.data?.[getGames.data.length - 1].id ?? "",
@@ -110,7 +115,7 @@ export const Square = ({
             width={size}
             height={size}
             src={`https://noun.pics/${CalculateUuidToNumber(
-              address ?? ""
+              address ?? "",
             )}.jpg`}
             alt=""
           />

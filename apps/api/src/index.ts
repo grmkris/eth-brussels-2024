@@ -8,12 +8,30 @@ import moveRoutes from "./features/moves/movesRouter";
 
 const app = new OpenAPIHono();
 
-app.use("*",
-    cors({
-        origin: "*",
-        allowHeaders: ["Origin", "Content-Type", "Authorization"],
-        allowMethods: ["GET", "OPTIONS", "POST", "PUT", "DELETE", "PATCH"],
-    })
+app.all().use(
+  "*",
+  cors({
+    origin: [
+      "https://related-awake-shark.ngrok-free.app",
+      "http://localhost:3000",
+      "https://rnibg-213-214-42-42.a.free.pinggy.link",
+      "https://rnkgs-213-214-42-42.a.free.pinggy.link",
+    ],
+    allowHeaders: [
+      "Origin",
+      "Content-Type",
+      "authorization",
+      "Authorization",
+      "Accept",
+      "Accept-Encoding",
+      "Accept-Language",
+      "Connection",
+      "Host",
+      "Origin",
+      "Referer",
+    ],
+    allowMethods: ["GET", "OPTIONS", "POST", "PUT", "DELETE", "PATCH"],
+  }),
 );
 
 app.use("*", requestMiddleware);
@@ -23,16 +41,16 @@ app.route("/", gameRoutes);
 app.route("/", moveRoutes);
 
 app.doc("/doc", {
-    openapi: "3.0.0",
-    info: {
-        version: "1.0.0",
-        title: "API",
-    }
+  openapi: "3.0.0",
+  info: {
+    version: "1.0.0",
+    title: "API",
+  },
 });
 app.get("/ui", swaggerUI({ url: "/doc" }));
 
 export default {
-    port: 3001,
-    fetch: app.fetch,
-    app: app,
+  port: 3001,
+  fetch: app.fetch,
+  app: app,
 };
