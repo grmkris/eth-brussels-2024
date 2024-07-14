@@ -1,672 +1,616 @@
 export default {
-  "openapi": "3.0.0",
-  "info": {
-    "version": "1.0.0",
-    "title": "API"
+  openapi: "3.0.0",
+  info: {
+    version: "1.0.0",
+    title: "API",
   },
-  "components": {
-    "schemas": {},
-    "parameters": {}
+  components: {
+    schemas: {},
+    parameters: {},
   },
-  "paths": {
+  paths: {
     "/players/{address}": {
-      "get": {
-        "operationId": "retrievePlayerByAddress",
-        "summary": "Retrieve player",
-        "tags": [
-          "Players"
-        ],
-        "description": "Retrieve a player by address",
-        "parameters": [
+      get: {
+        operationId: "retrievePlayerByAddress",
+        summary: "Retrieve player",
+        tags: ["Players"],
+        description: "Retrieve a player by address",
+        parameters: [
           {
-            "schema": {
-              "type": "string"
+            schema: {
+              type: "string",
             },
-            "required": true,
-            "name": "address",
-            "in": "path"
-          }
+            required: true,
+            name: "address",
+            in: "path",
+          },
         ],
-        "responses": {
+        responses: {
           "200": {
-            "description": "Retrieved player successfully.",
-            "content": {
+            description: "Retrieved player successfully.",
+            content: {
               "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string"
+                schema: {
+                  type: "object",
+                  properties: {
+                    id: {
+                      type: "string",
                     },
-                    "address": {
-                      "type": "string"
+                    address: {
+                      type: "string",
                     },
-                    "challenge": {
-                      "type": "string"
+                    challenge: {
+                      type: "string",
                     },
-                    "signatureVerified": {
-                      "type": "boolean",
-                      "nullable": true
+                    signatureVerified: {
+                      type: "boolean",
+                      nullable: true,
                     },
-                    "worldcoinVerified": {
-                      "type": "boolean",
-                      "nullable": true
+                    worldcoinVerified: {
+                      type: "boolean",
+                      nullable: true,
                     },
-                    "lastMove": {
-                      "type": "string"
+                    lastMove: {
+                      type: "string",
                     },
-                    "createdAt": {
-                      "type": "string"
-                    }
+                    createdAt: {
+                      type: "string",
+                    },
                   },
-                  "required": [
+                  required: [
                     "id",
                     "address",
                     "challenge",
                     "signatureVerified",
                     "worldcoinVerified",
                     "lastMove",
-                    "createdAt"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
+                    "createdAt",
+                  ],
+                },
+              },
+            },
+          },
+        },
+      },
     },
     "/players/connect": {
-      "post": {
-        "operationId": "connectPlayer",
-        "summary": "Connect player",
-        "tags": [
-          "Players"
-        ],
-        "description": "Connect player",
-        "requestBody": {
-          "content": {
+      post: {
+        operationId: "connectPlayer",
+        summary: "Connect player",
+        tags: ["Players"],
+        description: "Connect player",
+        requestBody: {
+          content: {
             "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "address": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "address"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Created player successfully.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string"
-                    },
-                    "address": {
-                      "type": "string"
-                    },
-                    "challenge": {
-                      "type": "string"
-                    },
-                    "signatureVerified": {
-                      "type": "boolean",
-                      "nullable": true
-                    },
-                    "worldcoinVerified": {
-                      "type": "boolean",
-                      "nullable": true
-                    },
-                    "lastMove": {
-                      "type": "string"
-                    },
-                    "createdAt": {
-                      "type": "string"
-                    }
+              schema: {
+                type: "object",
+                properties: {
+                  address: {
+                    type: "string",
                   },
-                  "required": [
+                },
+                required: ["address"],
+              },
+            },
+          },
+        },
+        responses: {
+          "201": {
+            description: "Created player successfully.",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    id: {
+                      type: "string",
+                    },
+                    address: {
+                      type: "string",
+                    },
+                    challenge: {
+                      type: "string",
+                    },
+                    signatureVerified: {
+                      type: "boolean",
+                      nullable: true,
+                    },
+                    worldcoinVerified: {
+                      type: "boolean",
+                      nullable: true,
+                    },
+                    lastMove: {
+                      type: "string",
+                    },
+                    createdAt: {
+                      type: "string",
+                    },
+                  },
+                  required: [
                     "id",
                     "address",
                     "challenge",
                     "signatureVerified",
                     "worldcoinVerified",
                     "lastMove",
-                    "createdAt"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
+                    "createdAt",
+                  ],
+                },
+              },
+            },
+          },
+        },
+      },
     },
     "/players/verify-signature": {
-      "post": {
-        "operationId": "verifyPlayerSignature",
-        "summary": "Verify player",
-        "tags": [
-          "Players"
-        ],
-        "description": "Verify player signature",
-        "requestBody": {
-          "content": {
+      post: {
+        operationId: "verifyPlayerSignature",
+        summary: "Verify player",
+        tags: ["Players"],
+        description: "Verify player signature",
+        requestBody: {
+          content: {
             "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "address": {
-                    "type": "string"
+              schema: {
+                type: "object",
+                properties: {
+                  address: {
+                    type: "string",
                   },
-                  "signature": {
-                    "type": "string"
-                  }
+                  signature: {
+                    type: "string",
+                  },
                 },
-                "required": [
-                  "address",
-                  "signature"
-                ]
-              }
-            }
-          }
+                required: ["address", "signature"],
+              },
+            },
+          },
         },
-        "responses": {
+        responses: {
           "201": {
-            "description": "Verified player successfully.",
-            "content": {
+            description: "Verified player successfully.",
+            content: {
               "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "token": {
-                      "type": "string"
+                schema: {
+                  type: "object",
+                  properties: {
+                    token: {
+                      type: "string",
                     },
-                    "player": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string"
+                    player: {
+                      type: "object",
+                      properties: {
+                        id: {
+                          type: "string",
                         },
-                        "address": {
-                          "type": "string"
+                        address: {
+                          type: "string",
                         },
-                        "challenge": {
-                          "type": "string"
+                        challenge: {
+                          type: "string",
                         },
-                        "signatureVerified": {
-                          "type": "boolean",
-                          "nullable": true
+                        signatureVerified: {
+                          type: "boolean",
+                          nullable: true,
                         },
-                        "worldcoinVerified": {
-                          "type": "boolean",
-                          "nullable": true
+                        worldcoinVerified: {
+                          type: "boolean",
+                          nullable: true,
                         },
-                        "lastMove": {
-                          "type": "string"
+                        lastMove: {
+                          type: "string",
                         },
-                        "createdAt": {
-                          "type": "string"
-                        }
+                        createdAt: {
+                          type: "string",
+                        },
                       },
-                      "required": [
+                      required: [
                         "id",
                         "address",
                         "challenge",
                         "signatureVerified",
                         "worldcoinVerified",
                         "lastMove",
-                        "createdAt"
-                      ]
-                    }
+                        "createdAt",
+                      ],
+                    },
                   },
-                  "required": [
-                    "token",
-                    "player"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
+                  required: ["token", "player"],
+                },
+              },
+            },
+          },
+        },
+      },
     },
     "/players/verify-worldcoin": {
-      "post": {
-        "operationId": "verifyWorldIdPlayer",
-        "summary": "Verify WORLDID player",
-        "tags": [
-          "Players"
-        ],
-        "description": "Verify worldID player signature",
-        "parameters": [
+      post: {
+        operationId: "verifyWorldIdPlayer",
+        summary: "Verify WORLDID player",
+        tags: ["Players"],
+        description: "Verify worldID player signature",
+        parameters: [
           {
-            "schema": {
-              "type": "string",
-              "example": "Bearer SECRET"
+            schema: {
+              type: "string",
+              example: "Bearer SECRET",
             },
-            "required": true,
-            "name": "authorization",
-            "in": "header"
-          }
+            required: true,
+            name: "authorization",
+            in: "header",
+          },
         ],
-        "requestBody": {
-          "content": {
+        requestBody: {
+          content: {
             "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "worldCoinSignature": {
-                    "nullable": true
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Verified player successfully.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "ok": {
-                      "type": "boolean"
-                    }
+              schema: {
+                type: "object",
+                properties: {
+                  worldCoinSignature: {
+                    nullable: true,
                   },
-                  "required": [
-                    "ok"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          "201": {
+            description: "Verified player successfully.",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    ok: {
+                      type: "boolean",
+                    },
+                  },
+                  required: ["ok"],
+                },
+              },
+            },
+          },
+        },
+      },
     },
     "/players/payment-signature": {
-      "post": {
-        "operationId": "requestPaymentSignature",
-        "summary": "Request payment signature",
-        "tags": [
-          "Players"
-        ],
-        "description": "Request a signature for a player playing",
-        "requestBody": {
-          "content": {
+      post: {
+        operationId: "requestPaymentSignature",
+        summary: "Request payment signature",
+        tags: ["Players"],
+        description: "Request a signature for a player playing",
+        requestBody: {
+          content: {
             "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "senderAddress": {
-                    "type": "string"
+              schema: {
+                type: "object",
+                properties: {
+                  senderAddress: {
+                    type: "string",
                   },
-                  "transferContractAddress": {
-                    "type": "string"
-                  }
+                  transferContractAddress: {
+                    type: "string",
+                  },
                 },
-                "required": [
-                  "senderAddress",
-                  "transferContractAddress"
-                ]
-              }
-            }
-          }
+                required: ["senderAddress", "transferContractAddress"],
+              },
+            },
+          },
         },
-        "responses": {
+        responses: {
           "201": {
-            "description": "Requested payment signature successfully.",
-            "content": {
+            description: "Requested payment signature successfully.",
+            content: {
               "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string"
+                schema: {
+                  type: "object",
+                  properties: {
+                    id: {
+                      type: "string",
                     },
-                    "signature": {
-                      "type": "string"
+                    signature: {
+                      type: "string",
                     },
-                    "deadline": {
-                      "type": "string"
-                    }
+                    deadline: {
+                      type: "string",
+                    },
                   },
-                  "required": [
-                    "id",
-                    "signature",
-                    "deadline"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
+                  required: ["id", "signature", "deadline"],
+                },
+              },
+            },
+          },
+        },
+      },
     },
     "/games/{id}": {
-      "get": {
-        "operationId": "retrieveGame",
-        "summary": "Retrieve game",
-        "tags": [
-          "Games"
-        ],
-        "description": "Retrieve a game by ID",
-        "parameters": [
+      get: {
+        operationId: "retrieveGame",
+        summary: "Retrieve game",
+        tags: ["Games"],
+        description: "Retrieve a game by ID",
+        parameters: [
           {
-            "schema": {
-              "type": "string"
+            schema: {
+              type: "string",
             },
-            "required": true,
-            "name": "id",
-            "in": "path"
-          }
+            required: true,
+            name: "id",
+            in: "path",
+          },
         ],
-        "responses": {
+        responses: {
           "200": {
-            "description": "Retrieved game successfully.",
-            "content": {
+            description: "Retrieved game successfully.",
+            content: {
               "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "format": "uuid"
+                schema: {
+                  type: "object",
+                  properties: {
+                    id: {
+                      type: "string",
+                      format: "uuid",
                     },
-                    "status": {
-                      "type": "string",
-                      "enum": [
-                        "ongoing",
-                        "finished"
-                      ]
+                    status: {
+                      type: "string",
+                      enum: ["ongoing", "finished"],
                     },
-                    "winnerId": {
-                      "type": "string",
-                      "nullable": true,
-                      "format": "uuid"
+                    winnerId: {
+                      type: "string",
+                      nullable: true,
+                      format: "uuid",
                     },
-                    "createdAt": {
-                      "type": "string"
+                    createdAt: {
+                      type: "string",
                     },
-                    "updatedAt": {
-                      "type": "string"
+                    updatedAt: {
+                      type: "string",
                     },
-                    "map": {
-                      "type": "array",
-                      "items": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "playerAddress": {
-                              "type": "string",
-                              "nullable": true
-                            }
+                    map: {
+                      type: "array",
+                      items: {
+                        type: "array",
+                        items: {
+                          type: "object",
+                          properties: {
+                            playerAddress: {
+                              type: "string",
+                              nullable: true,
+                            },
                           },
-                          "required": [
-                            "playerAddress"
-                          ]
-                        }
-                      }
-                    }
+                          required: ["playerAddress"],
+                        },
+                      },
+                    },
                   },
-                  "required": [
+                  required: [
                     "id",
                     "status",
                     "winnerId",
                     "createdAt",
                     "updatedAt",
-                    "map"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
+                    "map",
+                  ],
+                },
+              },
+            },
+          },
+        },
+      },
     },
     "/games": {
-      "get": {
-        "operationId": "listGames",
-        "summary": "List games",
-        "tags": [
-          "Games"
-        ],
-        "description": "List all games",
-        "responses": {
+      get: {
+        operationId: "listGames",
+        summary: "List games",
+        tags: ["Games"],
+        description: "List all games",
+        responses: {
           "200": {
-            "description": "Listed games successfully.",
-            "content": {
+            description: "Listed games successfully.",
+            content: {
               "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string"
+                schema: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      id: {
+                        type: "string",
                       },
-                      "status": {
-                        "type": "string",
-                        "enum": [
-                          "ongoing",
-                          "finished"
-                        ]
+                      status: {
+                        type: "string",
+                        enum: ["ongoing", "finished"],
                       },
-                      "winnerId": {
-                        "type": "string",
-                        "nullable": true
+                      winnerId: {
+                        type: "string",
+                        nullable: true,
                       },
-                      "createdAt": {
-                        "type": "string"
+                      createdAt: {
+                        type: "string",
                       },
-                      "updatedAt": {
-                        "type": "string"
+                      updatedAt: {
+                        type: "string",
                       },
-                      "map": {
-                        "type": "array",
-                        "items": {
-                          "type": "array",
-                          "nullable": true,
-                          "items": {
-                            "type": "object",
-                            "nullable": true,
-                            "properties": {
-                              "playerAddress": {
-                                "type": "string",
-                                "nullable": true
-                              }
+                      map: {
+                        type: "array",
+                        items: {
+                          type: "array",
+                          nullable: true,
+                          items: {
+                            type: "object",
+                            nullable: true,
+                            properties: {
+                              playerAddress: {
+                                type: "string",
+                                nullable: true,
+                              },
                             },
-                            "required": [
-                              "playerAddress"
-                            ]
-                          }
-                        }
-                      }
+                            required: ["playerAddress"],
+                          },
+                        },
+                      },
                     },
-                    "required": [
+                    required: [
                       "id",
                       "status",
                       "winnerId",
                       "createdAt",
                       "updatedAt",
-                      "map"
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "operationId": "createGame",
-        "summary": "Create game",
-        "tags": [
-          "Games"
-        ],
-        "description": "Create a game",
-        "responses": {
-          "201": {
-            "description": "Created game successfully.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string"
-                    },
-                    "status": {
-                      "type": "string",
-                      "enum": [
-                        "ongoing",
-                        "finished"
-                      ]
-                    },
-                    "winnerId": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "createdAt": {
-                      "type": "string"
-                    },
-                    "updatedAt": {
-                      "type": "string"
-                    },
-                    "map": {
-                      "type": "array",
-                      "items": {
-                        "type": "array",
-                        "nullable": true,
-                        "items": {
-                          "type": "object",
-                          "nullable": true,
-                          "properties": {
-                            "playerAddress": {
-                              "type": "string",
-                              "nullable": true
-                            }
-                          },
-                          "required": [
-                            "playerAddress"
-                          ]
-                        }
-                      }
-                    }
+                      "map",
+                    ],
                   },
-                  "required": [
+                },
+              },
+            },
+          },
+        },
+      },
+      post: {
+        operationId: "createGame",
+        summary: "Create game",
+        tags: ["Games"],
+        description: "Create a game",
+        responses: {
+          "201": {
+            description: "Created game successfully.",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    id: {
+                      type: "string",
+                    },
+                    status: {
+                      type: "string",
+                      enum: ["ongoing", "finished"],
+                    },
+                    winnerId: {
+                      type: "string",
+                      nullable: true,
+                    },
+                    createdAt: {
+                      type: "string",
+                    },
+                    updatedAt: {
+                      type: "string",
+                    },
+                    map: {
+                      type: "array",
+                      items: {
+                        type: "array",
+                        nullable: true,
+                        items: {
+                          type: "object",
+                          nullable: true,
+                          properties: {
+                            playerAddress: {
+                              type: "string",
+                              nullable: true,
+                            },
+                          },
+                          required: ["playerAddress"],
+                        },
+                      },
+                    },
+                  },
+                  required: [
                     "id",
                     "status",
                     "winnerId",
                     "createdAt",
                     "updatedAt",
-                    "map"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
+                    "map",
+                  ],
+                },
+              },
+            },
+          },
+        },
+      },
     },
     "/games/{gameId}/players/{playerId}/moves": {
-      "post": {
-        "operationId": "createMove",
-        "summary": "Create move",
-        "tags": [
-          "Moves"
-        ],
-        "description": "Create a move",
-        "parameters": [
+      post: {
+        operationId: "createMove",
+        summary: "Create move",
+        tags: ["Moves"],
+        description: "Create a move",
+        parameters: [
           {
-            "schema": {
-              "type": "string"
+            schema: {
+              type: "string",
             },
-            "required": true,
-            "name": "gameId",
-            "in": "path"
+            required: true,
+            name: "gameId",
+            in: "path",
           },
           {
-            "schema": {
-              "type": "string"
+            schema: {
+              type: "string",
             },
-            "required": true,
-            "name": "playerId",
-            "in": "path"
-          }
+            required: true,
+            name: "playerId",
+            in: "path",
+          },
         ],
-        "requestBody": {
-          "content": {
+        requestBody: {
+          content: {
             "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "xCoordinate": {
-                    "type": "number"
+              schema: {
+                type: "object",
+                properties: {
+                  xCoordinate: {
+                    type: "number",
                   },
-                  "yCoordinate": {
-                    "type": "number"
-                  }
+                  yCoordinate: {
+                    type: "number",
+                  },
                 },
-                "required": [
-                  "xCoordinate",
-                  "yCoordinate"
-                ]
-              }
-            }
-          }
+                required: ["xCoordinate", "yCoordinate"],
+              },
+            },
+          },
         },
-        "responses": {
+        responses: {
           "201": {
-            "description": "Created move successfully.",
-            "content": {
+            description: "Created move successfully.",
+            content: {
               "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "format": "uuid"
+                schema: {
+                  type: "object",
+                  properties: {
+                    id: {
+                      type: "string",
+                      format: "uuid",
                     },
-                    "gameId": {
-                      "type": "string",
-                      "format": "uuid"
+                    gameId: {
+                      type: "string",
+                      format: "uuid",
                     },
-                    "playerId": {
-                      "type": "string",
-                      "format": "uuid"
+                    playerId: {
+                      type: "string",
+                      format: "uuid",
                     },
-                    "xCoordinate": {
-                      "type": "number"
+                    xCoordinate: {
+                      type: "number",
                     },
-                    "yCoordinate": {
-                      "type": "number"
+                    yCoordinate: {
+                      type: "number",
                     },
-                    "createdAt": {
-                      "type": "string"
+                    createdAt: {
+                      type: "string",
                     },
-                    "winnerId": {
-                      "type": "string",
-                      "nullable": true
+                    winnerId: {
+                      type: "string",
+                      nullable: true,
                     },
-                    "status": {
-                      "type": "string",
-                      "enum": [
-                        "ongoing",
-                        "finished"
-                      ]
-                    }
+                    status: {
+                      type: "string",
+                      enum: ["ongoing", "finished"],
+                    },
                   },
-                  "required": [
+                  required: [
                     "id",
                     "gameId",
                     "playerId",
@@ -674,14 +618,14 @@ export default {
                     "yCoordinate",
                     "createdAt",
                     "winnerId",
-                    "status"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+                    "status",
+                  ],
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
 } as const;

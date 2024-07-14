@@ -12,32 +12,33 @@ export const Square = ({
   column,
   player,
   isNewGame = false,
+  hasIcon = false, // New prop added
 }: {
   size: number;
   row: number;
   column: number;
   player?: PlayersOutput;
   isNewGame?: boolean;
+  hasIcon?: boolean; // New prop added
 }) => {
-  const [hasIcon, setHasIcon] = useState(false);
   const [animationState, setAnimationState] = useState<
     "none" | "scaling" | "pulse"
   >("none");
   const move = useCreateMove({
     onSuccess: () => {
-      setHasIcon(true);
+      // setHasIcon(true); // No need to set hasIcon in this component
     },
   });
   const playPosition = usePlayPosition({
     onSuccess: () => {
-      setHasIcon(true);
+      // setHasIcon(true); // No need to set hasIcon in this component
     },
   });
   const getGames = useGetGames();
 
   useEffect(() => {
     if (isNewGame) {
-      setHasIcon(false);
+      // setHasIcon(false); // No need to set hasIcon in this component
     }
   }, [isNewGame]);
 

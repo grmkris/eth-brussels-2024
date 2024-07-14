@@ -15,7 +15,6 @@ export const GameArea = ({
   const [gridSize, setGridSize] = useState(initialGridSize);
   const [zoomLevel, setZoomLevel] = useState(initialZoomLevel);
   const [panning, setPanning] = useState(false);
-
   const [panStart, setPanStart] = useState<{ x: number; y: number } | null>(
     null,
   );
@@ -27,7 +26,6 @@ export const GameArea = ({
   const getGame = useGetGame({
     id: getGames.data?.[getGames.data.length - 1]?.id ?? "",
   });
-  console.log("getGame", getGame.data);
   const [isOpen, setIsOpen] = useState(
     !!getGames.data?.[getGames.data.length - 1]?.winnerId,
   );
@@ -119,6 +117,18 @@ export const GameArea = ({
 
   const dynamicSize = Math.max(minSquareSize, initialSize / zoomLevel);
 
+  let indices: { row: number; column: number }[] = [];
+
+  if (getGame.data && getGame.data?.map?.length !== 0) {
+    for (let i = 0; i < getGame.data?.map?.length!; i++) {
+      for (let j = 0; j < getGame.data?.map?.[i]!.length!; j++) {
+        if (getGame.data?.map?.[i]?.[j].playerAddress !== null) {
+          indices.push({ column: i, row: j });
+        }
+      }
+    }
+  }
+
   return (
     <div
       ref={gameAreaRef}
@@ -145,6 +155,9 @@ export const GameArea = ({
         {Array.from({ length: gridSize * gridSize }).map((_, i) => {
           const row = Math.floor(i / gridSize);
           const column = i % gridSize;
+          const hasIcon = indices.some(
+            (index) => index.row === row && index.column === column,
+          );
           return (
             <Square
               isNewGame={!getGames.data?.[getGames.data.length - 1]?.winnerId}
@@ -153,6 +166,7 @@ export const GameArea = ({
               size={dynamicSize}
               row={row}
               column={column}
+              hasIcon={hasIcon}
             />
           );
         })}
