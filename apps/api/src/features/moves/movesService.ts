@@ -52,7 +52,7 @@ export const movesService = (deps: {
                 id: props.gameId,
                 updateData: {
                     winnerId: props.playerId,
-                    status: "finished",
+                    status: "ongoing",
                 },
             });
 
